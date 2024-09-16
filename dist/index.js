@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 let time = document.getElementById("time");
 let submitAlarm = document.getElementById("submit");
 let hourAlarm = document.getElementById("alarm-hour");
@@ -8,8 +17,10 @@ let files = document.getElementsByTagName("input")[0];
 let file;
 let fileURL;
 files.addEventListener("change", (e) => {
-    file = e.target.files[0];
-    console.log(file);
+    let target = e.target;
+    if (target.files) {
+        file = target.files[0];
+    }
     fileURL = URL.createObjectURL(file);
 });
 let HOURS = "12";
@@ -36,18 +47,30 @@ function setCurrentValues() {
     if (time)
         time.innerHTML = `${HOURS}:${MINUTES}:${SECONDS} ${DATE}`;
 }
-let video = document.getElementById("videoPlayer");
 let audio = document.getElementById("audioPlayer");
+// Make Blob URL From Default Alarm Song
+function makeBlobUrl() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let alarmSrc = audio.src;
+        try {
+            let respownse = yield fetch(alarmSrc);
+            console.log(respownse);
+            if (!respownse.ok)
+                throw new Error("Failed To Fetch File ");
+            let audioBlob = yield respownse.blob();
+            let blobUrl = URL.createObjectURL(audioBlob);
+            audio.src = blobUrl;
+        }
+        catch (_a) { }
+    });
+}
+makeBlobUrl();
 // Create URL Of File And Play It
 function readyFile() {
     if (file) {
         if (file.type.startsWith("audio")) {
             audio.src = fileURL;
             audio.play();
-        }
-        else if (file.type.startsWith("video")) {
-            video.src = fileURL;
-            video.play();
         }
     }
 }
@@ -83,12 +106,14 @@ const audioCurrnetSecunds = document.getElementById("audio-current-sec");
 // Play/Pause the audio
 function updatePlayerTimeValues() {
     let fullTime = audio.duration;
-    let maxMinutes = Math.floor(fullTime / 60);
-    let maxSeconds = Math.floor(fullTime % 60);
-    if (audioMaxMinutes)
-        audioMaxMinutes.innerHTML = `${maxMinutes < 10 ? "0" + maxMinutes : maxMinutes}`;
-    if (audioMaxSecunds)
-        audioMaxSecunds.innerHTML = `${maxSeconds < 10 ? "0" + maxSeconds : maxSeconds}`;
+    if (!isNaN(fullTime)) {
+        let maxMinutes = Math.floor(fullTime / 60);
+        let maxSeconds = Math.floor(fullTime % 60);
+        if (audioMaxMinutes)
+            audioMaxMinutes.innerHTML = `${maxMinutes < 10 ? "0" + maxMinutes : maxMinutes}`;
+        if (audioMaxSecunds)
+            audioMaxSecunds.innerHTML = `${maxSeconds < 10 ? "0" + maxSeconds : maxSeconds}`;
+    }
     setInterval(() => {
         let currentTime = audio.currentTime;
         let currentMinute = Math.floor(currentTime / 60);
@@ -102,7 +127,6 @@ function updatePlayerTimeValues() {
 playPauseBtn === null || playPauseBtn === void 0 ? void 0 : playPauseBtn.addEventListener("click", function () {
     if (audio.paused || audio.ended) {
         audio.play();
-        updatePlayerTimeValues();
         if (playPauseBtn)
             playPauseBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
     }
@@ -119,26 +143,31 @@ audio === null || audio === void 0 ? void 0 : audio.addEventListener("timeupdate
 });
 // Seek audio when progress bar is clicked
 progressBar === null || progressBar === void 0 ? void 0 : progressBar.addEventListener("input", function () {
-    const seekTime = (progressBar.value / 100) * audio.duration;
+    const seekTime = (+progressBar.value / 100) * audio.duration;
     audio.currentTime = seekTime;
     console.log(audio.currentTime % 60, audioCurrnetSecunds);
 });
 // Change volume control
 volumeControl === null || volumeControl === void 0 ? void 0 : volumeControl.addEventListener("input", function () {
-    audio.volume = volumeControl.value / 100;
+    audio.volume = +volumeControl.value / 100;
 });
 // Mute/Unmute audio
 muteBtn === null || muteBtn === void 0 ? void 0 : muteBtn.addEventListener("click", function () {
     if (audio.muted) {
         audio.muted = false;
-        muteBtn === null || muteBtn === void 0 ? void 0 : muteBtn.innerHTML = `<i class="fa-solid fa-volume-high"></i>`;
+        if (muteBtn)
+            muteBtn.innerHTML = `<i class="fa-solid fa-volume-high"></i>`;
     }
     else {
         audio.muted = true;
-        muteBtn === null || muteBtn === void 0 ? void 0 : muteBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i>`;
+        if (muteBtn)
+            muteBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i>`;
     }
 });
 audio === null || audio === void 0 ? void 0 : audio.addEventListener("play", () => {
     if (playPauseBtn)
         playPauseBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
+});
+audio === null || audio === void 0 ? void 0 : audio.addEventListener("loadedmetadata", () => {
+    updatePlayerTimeValues();
 });

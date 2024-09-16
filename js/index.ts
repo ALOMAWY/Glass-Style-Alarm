@@ -19,8 +19,11 @@ interface File {
 let fileURL: string;
 
 files.addEventListener("change", (e) => {
-  file = e.target.files[0];
-  console.log(file);
+  let target = e.target as HTMLInputElement;
+
+  if (target.files) {
+    file = target.files[0];
+  }
 
   fileURL = URL.createObjectURL(file);
 });
@@ -28,7 +31,9 @@ files.addEventListener("change", (e) => {
 let HOURS: string = "12";
 
 let MINUTES: string = "22";
+
 let SECONDS: string = "36";
+
 let DATE: string = "AM";
 
 function setCurrentValues() {
@@ -56,10 +61,28 @@ function setCurrentValues() {
   if (time) time.innerHTML = `${HOURS}:${MINUTES}:${SECONDS} ${DATE}`;
 }
 
-let video = document.getElementById("videoPlayer") as HTMLVideoElement;
-
 let audio = document.getElementById("audioPlayer") as HTMLAudioElement;
 
+// Make Blob URL From Default Alarm Song
+
+async function makeBlobUrl() {
+  let alarmSrc = audio.src;
+
+  try {
+    let respownse = await fetch(alarmSrc);
+
+    console.log(respownse);
+
+    if (!respownse.ok) throw new Error("Failed To Fetch File ");
+
+    let audioBlob = await respownse.blob();
+
+    let blobUrl = URL.createObjectURL(audioBlob);
+
+    audio.src = blobUrl;
+  } catch {}
+}
+makeBlobUrl();
 // Create URL Of File And Play It
 function readyFile() {
   if (file) {
@@ -67,10 +90,6 @@ function readyFile() {
       audio.src = fileURL;
 
       audio.play();
-    } else if (file.type.startsWith("video")) {
-      video.src = fileURL;
-
-      video.play();
     }
   }
 }
@@ -107,7 +126,9 @@ const playPauseBtn = document.getElementById("play-pause");
 
 const progressBar = document.getElementById("progress-bar") as HTMLInputElement;
 
-const volumeControl = document.getElementById("volume-control");
+const volumeControl = document.getElementById(
+  "volume-control"
+) as HTMLInputElement;
 
 const muteBtn = document.getElementById("mute-btn");
 
@@ -124,19 +145,20 @@ const audioCurrnetSecunds = document.getElementById("audio-current-sec");
 function updatePlayerTimeValues() {
   let fullTime = audio.duration;
 
-  let maxMinutes = Math.floor(fullTime / 60);
+  if (!isNaN(fullTime)) {
+    let maxMinutes = Math.floor(fullTime / 60);
 
-  let maxSeconds = Math.floor(fullTime % 60);
+    let maxSeconds = Math.floor(fullTime % 60);
+    if (audioMaxMinutes)
+      audioMaxMinutes.innerHTML = `${
+        maxMinutes < 10 ? "0" + maxMinutes : maxMinutes
+      }`;
 
-  if (audioMaxMinutes)
-    audioMaxMinutes.innerHTML = `${
-      maxMinutes < 10 ? "0" + maxMinutes : maxMinutes
-    }`;
-
-  if (audioMaxSecunds)
-    audioMaxSecunds.innerHTML = `${
-      maxSeconds < 10 ? "0" + maxSeconds : maxSeconds
-    }`;
+    if (audioMaxSecunds)
+      audioMaxSecunds.innerHTML = `${
+        maxSeconds < 10 ? "0" + maxSeconds : maxSeconds
+      }`;
+  }
 
   setInterval(() => {
     let currentTime = audio.currentTime;
@@ -158,7 +180,6 @@ function updatePlayerTimeValues() {
 playPauseBtn?.addEventListener("click", function () {
   if (audio.paused || audio.ended) {
     audio.play();
-    updatePlayerTimeValues();
     if (playPauseBtn)
       playPauseBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
   } else {
@@ -175,7 +196,7 @@ audio?.addEventListener("timeupdate", function () {
 
 // Seek audio when progress bar is clicked
 progressBar?.addEventListener("input", function () {
-  const seekTime = (progressBar.value / 100) * audio.duration;
+  const seekTime = (+progressBar.value / 100) * audio.duration;
   audio.currentTime = seekTime;
 
   console.log(audio.currentTime % 60, audioCurrnetSecunds);
@@ -183,21 +204,25 @@ progressBar?.addEventListener("input", function () {
 
 // Change volume control
 volumeControl?.addEventListener("input", function () {
-  audio.volume = volumeControl.value / 100;
+  audio.volume = +volumeControl.value / 100;
 });
 
 // Mute/Unmute audio
 muteBtn?.addEventListener("click", function () {
   if (audio.muted) {
     audio.muted = false;
-    muteBtn?.innerHTML = `<i class="fa-solid fa-volume-high"></i>`;
+    if (muteBtn) muteBtn.innerHTML = `<i class="fa-solid fa-volume-high"></i>`;
   } else {
     audio.muted = true;
-    muteBtn?.innerHTML = `<i class="fa-solid fa-volume-xmark"></i>`;
+    if (muteBtn) muteBtn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i>`;
   }
 });
 
 audio?.addEventListener("play", () => {
   if (playPauseBtn)
     playPauseBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
+});
+
+audio?.addEventListener("loadedmetadata", () => {
+  updatePlayerTimeValues();
 });
