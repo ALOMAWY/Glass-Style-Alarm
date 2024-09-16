@@ -7,22 +7,6 @@
   padding: 0;
 }
 
-@media (max-width: 991px) {
-  :root {
-    font-size: 10px;
-  }
-}
-@media (max-width: 400px) {
-  :root {
-    font-size: 5px;
-  }
-}
-
-@media (max-width: 200px) {
-  :root {
-    font-size: 3px;
-  }
-}
 body {
   display: flex;
   align-items: center;
@@ -43,6 +27,7 @@ body {
   height: 100%;
   width: 40%;
 }
+
 .clock {
   width: fit-content;
   padding: 10px;
@@ -86,8 +71,11 @@ body {
 
   input[type="file"] {
     background-color: #141414;
-    width: fit-content;
     font-size: 1rem;
+    padding: 20px;
+    border-radius: 7px;
+    color: white;
+    width: fit-content;
   }
   #submit {
     display: block;
@@ -106,4 +94,133 @@ body {
   }
 }
 
+/* Audio Player Controls */
 
+/* Base styling for the audio player container */
+.audio-player {
+  position: relative;
+  width: 60%;
+  margin: 20px auto;
+  background-color: #333;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom controls container */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+
+  .control-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 10px;
+
+    &:hover {
+      color: #f0f0f0;
+    }
+  }
+
+  /* Progress bar styling */
+  .progress-bar {
+    width: 50%;
+    height: 5px;
+    background-color: #444;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 10px;
+      height: 10px;
+      background-color: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    &::-moz-range-thumb {
+      width: 10px;
+      height: 10px;
+      background-color: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+
+  /* Volume control styling */
+  .volume-control {
+    width: 80px;
+    background-color: #444;
+    cursor: pointer;
+
+    &::-webkit-slider-thumb,
+    &::-moz-range-thumb {
+      width: 10px;
+      height: 10px;
+      background-color: #fff;
+      cursor: pointer;
+    }
+  }
+
+  /* Mute button */
+  #mute-btn {
+    font-size: 16px;
+  }
+}
+
+/* Play/Pause button */
+
+@media (max-width: 1570px) {
+  .container {
+    width: 50%;
+  }
+}
+@media (max-width: 1270px) {
+  .container {
+    width: 60%;
+  }
+}
+@media (max-width: 991px) {
+  :root {
+    font-size: 10px;
+  }
+
+  .container {
+    width: 80%;
+  }
+}
+
+@media (max-width: 764px) {
+  .container {
+    width: 90%;
+  }
+  .audio-player {
+    width: 70%;
+  }
+}
+@media (max-width: 530px) {
+  .container {
+    width: 100%;
+  }
+  .audio-player {
+    width: 90%;
+  }
+}
+@media (max-width: 400px) {
+  :root {
+    font-size: 7px;
+  }
+}
+
+@media (max-width: 200px) {
+  :root {
+    font-size: 5px;
+  }
+}

@@ -7,35 +7,20 @@
   padding: 0;
 }
 
-@media (max-width: 991px) {
-  :root {
-    font-size: 10px;
-  }
-}
-@media (max-width: 400px) {
-  :root {
-    font-size: 5px;
-  }
-}
-@media (max-width: 200px) {
-  :root {
-    font-size: 3px;
-  }
-}
 body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   gap: 50px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: black;
@@ -49,14 +34,14 @@ body {
   gap: 100px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   height: 100%;
   width: 40%;
 }
@@ -80,11 +65,11 @@ body {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   -webkit-box-pack: space-evenly;
-  -ms-flex-pack: space-evenly;
-  justify-content: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
 }
 .set-your-alarm select {
   padding: 10px;
@@ -107,18 +92,21 @@ body {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   -webkit-box-pack: space-evenly;
-  -ms-flex-pack: space-evenly;
-  justify-content: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
 }
-.submit-section input[type="file"] {
+.submit-section input[type=file] {
   background-color: #141414;
+  font-size: 1rem;
+  padding: 20px;
+  border-radius: 7px;
+  color: white;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  font-size: 1rem;
 }
 .submit-section #submit {
   display: block;
@@ -131,48 +119,54 @@ body {
 @-webkit-keyframes rotate {
   from {
     -webkit-filter: hue-rotate(0);
-    filter: hue-rotate(0);
+            filter: hue-rotate(0);
   }
   to {
     -webkit-filter: hue-rotate(360deg);
-    filter: hue-rotate(360deg);
+            filter: hue-rotate(360deg);
   }
 }
 
 @keyframes rotate {
   from {
     -webkit-filter: hue-rotate(0);
-    filter: hue-rotate(0);
+            filter: hue-rotate(0);
   }
   to {
     -webkit-filter: hue-rotate(360deg);
-    filter: hue-rotate(360deg);
+            filter: hue-rotate(360deg);
   }
 }
-
 /* Audio Player Controls */
-
 /* Base styling for the audio player container */
 .audio-player {
   position: relative;
-  width: 400px;
+  width: 60%;
   margin: 20px auto;
   background-color: #333;
   padding: 15px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Custom controls container */
 .controls {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin-top: 10px;
+  /* Progress bar styling */
+  /* Volume control styling */
+  /* Mute button */
 }
-
-/* Play/Pause button */
-.control-btn {
+.controls .control-btn {
   background: none;
   border: none;
   color: white;
@@ -180,13 +174,10 @@ body {
   cursor: pointer;
   padding: 5px 10px;
 }
-
-.control-btn:hover {
+.controls .control-btn:hover {
   color: #f0f0f0;
 }
-
-/* Progress bar styling */
-.progress-bar {
+.controls .progress-bar {
   width: 50%;
   height: 5px;
   background-color: #444;
@@ -194,8 +185,7 @@ body {
   border-radius: 5px;
   cursor: pointer;
 }
-
-.progress-bar::-webkit-slider-thumb {
+.controls .progress-bar::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 10px;
   height: 10px;
@@ -203,31 +193,70 @@ body {
   border-radius: 50%;
   cursor: pointer;
 }
-
-.progress-bar::-moz-range-thumb {
+.controls .progress-bar::-moz-range-thumb {
   width: 10px;
   height: 10px;
   background-color: #fff;
   border-radius: 50%;
   cursor: pointer;
 }
-
-/* Volume control styling */
-.volume-control {
+.controls .volume-control {
   width: 80px;
   background-color: #444;
   cursor: pointer;
 }
-
-.volume-control::-webkit-slider-thumb,
-.volume-control::-moz-range-thumb {
+.controls .volume-control::-webkit-slider-thumb, .controls .volume-control::-moz-range-thumb {
   width: 10px;
   height: 10px;
   background-color: #fff;
   cursor: pointer;
 }
-
-/* Mute button */
-#mute-btn {
+.controls #mute-btn {
   font-size: 16px;
+}
+
+/* Play/Pause button */
+@media (max-width: 1570px) {
+  .container {
+    width: 50%;
+  }
+}
+@media (max-width: 1270px) {
+  .container {
+    width: 60%;
+  }
+}
+@media (max-width: 991px) {
+  :root {
+    font-size: 10px;
+  }
+  .container {
+    width: 80%;
+  }
+}
+@media (max-width: 764px) {
+  .container {
+    width: 90%;
+  }
+  .audio-player {
+    width: 70%;
+  }
+}
+@media (max-width: 530px) {
+  .container {
+    width: 100%;
+  }
+  .audio-player {
+    width: 90%;
+  }
+}
+@media (max-width: 400px) {
+  :root {
+    font-size: 7px;
+  }
+}
+@media (max-width: 200px) {
+  :root {
+    font-size: 5px;
+  }
 }
