@@ -152,16 +152,6 @@ body {
 
 /* Custom controls container */
 .controls {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  margin-top: 10px;
   /* Progress bar styling */
   /* Volume control styling */
   /* Mute button */
@@ -177,8 +167,22 @@ body {
 .controls .control-btn:hover {
   color: #f0f0f0;
 }
+.controls .edit-speed select {
+  padding: 10px;
+  font-size: 1.4rem;
+  background-color: transparent;
+  color: white;
+  border: 0px solid transparent;
+}
+.controls .edit-speed select:focus-visible {
+  outline: none;
+}
+.controls .edit-speed select option {
+  color: #000;
+  background-color: transparent;
+}
 .controls .progress-bar {
-  width: 50%;
+  width: 100%;
   height: 5px;
   background-color: #444;
   margin: 0 10px;

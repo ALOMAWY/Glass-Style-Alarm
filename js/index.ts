@@ -91,6 +91,8 @@ function readyFile() {
 
       audio.play();
     }
+  } else {
+    audio.play();
   }
 }
 
@@ -139,6 +141,17 @@ const audioMaxSecunds = document.getElementById("audio-max-sec");
 const audioCurrnetMinutes = document.getElementById("audio-currnet-min");
 
 const audioCurrnetSecunds = document.getElementById("audio-current-sec");
+
+const audioSpeedSelecteElement = document.getElementById(
+  "speed"
+) as HTMLSelectElement;
+
+audioSpeedSelecteElement.addEventListener("change", () => {
+  console.log(audioSpeedSelecteElement.value);
+  if (audio) {
+    audio.playbackRate = +audioSpeedSelecteElement.value;
+  }
+});
 
 // Play/Pause the audio
 
