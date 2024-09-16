@@ -24,6 +24,11 @@
   </head>
   <body>
     <div class="container">
+      <div
+        class="alert text-white fs-5 text-uppercase fw-bold position-absolute top-0 start-50 "
+      >
+        We will alert you at the hour.
+      </div>
       <div class="clock">
         <div id="time">12:25:54 AM</div>
       </div>
@@ -115,18 +120,18 @@
 
         <button id="submit">Submit</button>
       </section>
-      <div class="audio-player">
+      <div class="audio-player" >
         <audio id="audio" src="path_to_audio.mp3"></audio>
 
         <div
           class="controls d-flex flex-column justify-content-between align-items-center mt-1"
         >
-          <button id="play-pause" class="control-btn">
+          <button id="play-pause" class="control-btn mb-4">
             <i class="fa-solid fa-play"></i>
           </button>
 
           <div
-            class="settings d-flex align-items-center justify-content-between w-100"
+            class="settings d-flex align-items-center justify-content-between w-100 mb-3"
           >
             <div
               class="edit-volume d-flex flex-column align-items-start w-100 mb-4"
@@ -143,7 +148,10 @@
                 max="100"
               />
             </div>
-            <div class="edit-speed">
+            <div class="edit-speed d-flex flex-column align-items-end">
+              <span id="loop" class="text-white p-2 d-block fs-5">
+                <i class="fa-solid fa-arrow-rotate-left"></i>
+              </span>
               <select id="speed">
                 <option value="0.5">0.5%</option>
                 <option selected value="1">1%</option>

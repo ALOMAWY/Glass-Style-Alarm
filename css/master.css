@@ -1,3 +1,23 @@
+@-webkit-keyframes dropAlert {
+  0%, 100% {
+    -webkit-transform: translate(-50%, -200px);
+            transform: translate(-50%, -200px);
+  }
+  20%, 80% {
+    -webkit-transform: translate(-50%, 0px);
+            transform: translate(-50%, 0px);
+  }
+}
+@keyframes dropAlert {
+  0%, 100% {
+    -webkit-transform: translate(-50%, -200px);
+            transform: translate(-50%, -200px);
+  }
+  20%, 80% {
+    -webkit-transform: translate(-50%, 0px);
+            transform: translate(-50%, 0px);
+  }
+}
 :root {
   font-size: 14px;
 }
@@ -5,6 +25,8 @@
 * {
   margin: 0;
   padding: 0;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
 }
 
 body {
@@ -44,6 +66,11 @@ body {
           align-items: center;
   height: 100%;
   width: 40%;
+}
+
+.alert {
+  -webkit-transform: translate(-200px, -300px);
+          transform: translate(-200px, -300px);
 }
 
 .clock {
@@ -148,6 +175,11 @@ body {
   border-radius: 10px;
   -webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
           box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  height: 0;
+  opacity: 0;
+  -webkit-transition: 1.2s;
+  transition: 1.2s;
 }
 
 /* Custom controls container */
@@ -168,7 +200,7 @@ body {
   color: #f0f0f0;
 }
 .controls .edit-speed select {
-  padding: 10px;
+  padding: 0 10px 20px;
   font-size: 1.4rem;
   background-color: transparent;
   color: white;

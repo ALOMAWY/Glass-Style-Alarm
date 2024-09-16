@@ -9,6 +9,8 @@ var submitAlarm = document.getElementById("submit");
 var hourAlarm = document.getElementById("alarm-hour");
 var minuteAlarm = document.getElementById("alarm-min");
 var dateAlarm = document.getElementById("alarm-date");
+var audioPlayer = document.querySelector(".audio-player");
+var alertAlarm = document.querySelector(".alert");
 var files = document.getElementsByTagName("input")[0];
 var file;
 var fileURL;
@@ -88,10 +90,27 @@ function readyFile() {
   }
 }
 submitAlarm === null || submitAlarm === void 0 || submitAlarm.addEventListener("click", function () {
+  if (alertAlarm) {
+    alertAlarm.innerHTML = "We will alert you at the hour : ".concat(hourAlarm.value, ":").concat(minuteAlarm.value, ":").concat(dateAlarm.value);
+    alertAlarm.style.animation = "dropAlert 5s 0s 1 ease-in-out forwards";
+    setTimeout(function () {
+      alertAlarm.style.animation = "none";
+    }, 3000);
+  }
   var equalChecker = setInterval(function () {
     if (HOURS == hourAlarm.value && MINUTES == minuteAlarm.value && DATE.toUpperCase() == dateAlarm.value.toUpperCase()) {
       readyFile();
+      if (audioPlayer) {
+        audioPlayer.style.height = "fit-content";
+        audioPlayer.style.opacity = "1";
+      }
       return clearInterval(equalChecker);
+    } else {
+      if (audioPlayer) {
+        audioPlayer.style.height = "0";
+        audioPlayer.style.opacity = "0";
+      }
+      if (audio) audio.pause();
     }
   }, 0);
 });
@@ -120,10 +139,21 @@ var audioMaxSecunds = document.getElementById("audio-max-sec");
 var audioCurrnetMinutes = document.getElementById("audio-currnet-min");
 var audioCurrnetSecunds = document.getElementById("audio-current-sec");
 var audioSpeedSelecteElement = document.getElementById("speed");
+var audioLoopBtn = document.getElementById("loop");
 audioSpeedSelecteElement.addEventListener("change", function () {
   console.log(audioSpeedSelecteElement.value);
   if (audio) {
     audio.playbackRate = +audioSpeedSelecteElement.value;
+  }
+});
+audioLoopBtn === null || audioLoopBtn === void 0 || audioLoopBtn.addEventListener("click", function () {
+  if (!audio.loop) {
+    audio.loop = true;
+    audioLoopBtn.style.position = "relative";
+    audioLoopBtn.innerHTML = "<i style=\"position:relative; left:5%; top:60%; rotate:180deg; \" class=\"fa-solid fa-arrow-rotate-left\"></i><i style=\"position:relative;  \" class=\"fa-solid fa-arrow-rotate-left\"></i>";
+  } else {
+    audio.loop = false;
+    audioLoopBtn.innerHTML = "<i class=\"fa-solid fa-arrow-rotate-left\"></i>";
   }
 });
 

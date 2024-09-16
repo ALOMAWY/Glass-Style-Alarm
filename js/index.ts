@@ -8,6 +8,10 @@ let minuteAlarm = document.getElementById("alarm-min") as HTMLSelectElement;
 
 let dateAlarm = document.getElementById("alarm-date") as HTMLSelectElement;
 
+let audioPlayer = document.querySelector(".audio-player") as HTMLElement;
+
+let alertAlarm = document.querySelector(".alert") as HTMLElement;
+
 let files = document.getElementsByTagName("input")[0];
 
 let file: File;
@@ -97,6 +101,14 @@ function readyFile() {
 }
 
 submitAlarm?.addEventListener("click", () => {
+  if (alertAlarm) {
+    alertAlarm.innerHTML = `We will alert you at the hour : ${hourAlarm.value}:${minuteAlarm.value}:${dateAlarm.value}`;
+    alertAlarm.style.animation = "dropAlert 5s 0s 1 ease-in-out forwards";
+
+    setTimeout(() => {
+      alertAlarm.style.animation = "none";
+    }, 3000);
+  }
   let equalChecker = setInterval(() => {
     if (
       HOURS == hourAlarm.value &&
@@ -104,7 +116,18 @@ submitAlarm?.addEventListener("click", () => {
       DATE.toUpperCase() == dateAlarm.value.toUpperCase()
     ) {
       readyFile();
+      if (audioPlayer) {
+        audioPlayer.style.height = "fit-content";
+        audioPlayer.style.opacity = "1";
+      }
+
       return clearInterval(equalChecker);
+    } else {
+      if (audioPlayer) {
+        audioPlayer.style.height = "0";
+        audioPlayer.style.opacity = "0";
+      }
+      if (audio) audio.pause();
     }
   }, 0);
 });
@@ -146,10 +169,23 @@ const audioSpeedSelecteElement = document.getElementById(
   "speed"
 ) as HTMLSelectElement;
 
+const audioLoopBtn = document.getElementById("loop");
+
 audioSpeedSelecteElement.addEventListener("change", () => {
   console.log(audioSpeedSelecteElement.value);
   if (audio) {
     audio.playbackRate = +audioSpeedSelecteElement.value;
+  }
+});
+
+audioLoopBtn?.addEventListener("click", () => {
+  if (!audio.loop) {
+    audio.loop = true;
+    audioLoopBtn.style.position = "relative";
+    audioLoopBtn.innerHTML = `<i style="position:relative; left:5%; top:60%; rotate:180deg; " class="fa-solid fa-arrow-rotate-left"></i><i style="position:relative;  " class="fa-solid fa-arrow-rotate-left"></i>`;
+  } else {
+    audio.loop = false;
+    audioLoopBtn.innerHTML = `<i class="fa-solid fa-arrow-rotate-left"></i>`;
   }
 });
 

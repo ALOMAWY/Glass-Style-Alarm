@@ -1,0 +1,11 @@
+// drop alert
+@keyframes dropAlert {
+  0%,
+  100% {
+    transform: translate(-50%, -200px);
+  }
+  20%,
+  80% {
+    transform: translate(-50%, 0px);
+  }
+}
