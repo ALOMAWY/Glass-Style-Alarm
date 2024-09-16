@@ -1,0 +1,109 @@
+:root {
+  font-size: 14px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 991px) {
+  :root {
+    font-size: 10px;
+  }
+}
+@media (max-width: 400px) {
+  :root {
+    font-size: 5px;
+  }
+}
+
+@media (max-width: 200px) {
+  :root {
+    font-size: 3px;
+  }
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 50px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: black;
+  min-height: 100vh;
+}
+
+.container {
+  display: flex;
+  gap: 100px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 40%;
+}
+.clock {
+  width: fit-content;
+  padding: 10px;
+  border-radius: 10px;
+
+  #time {
+    font-size: 4rem;
+    font-weight: bold;
+    color: white;
+  }
+}
+
+.set-your-alarm {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  select {
+    padding: 10px;
+    font-size: 1.4rem;
+    background-color: transparent;
+    color: white;
+    border: 0px solid transparent;
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    option {
+      color: #000;
+      background-color: transparent;
+    }
+  }
+}
+
+.submit-section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+  input[type="file"] {
+    background-color: #141414;
+    width: fit-content;
+    font-size: 1rem;
+  }
+  #submit {
+    display: block;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+}
+@keyframes rotate {
+  from {
+    filter: hue-rotate(0);
+  }
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+
+

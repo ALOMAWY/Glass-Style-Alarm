@@ -1,0 +1,233 @@
+:root {
+  font-size: 14px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 991px) {
+  :root {
+    font-size: 10px;
+  }
+}
+@media (max-width: 400px) {
+  :root {
+    font-size: 5px;
+  }
+}
+@media (max-width: 200px) {
+  :root {
+    font-size: 3px;
+  }
+}
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  gap: 50px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: black;
+  min-height: 100vh;
+}
+
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 100px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100%;
+  width: 40%;
+}
+
+.clock {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 10px;
+}
+.clock #time {
+  font-size: 4rem;
+  font-weight: bold;
+  color: white;
+}
+
+.set-your-alarm {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: space-evenly;
+  -ms-flex-pack: space-evenly;
+  justify-content: space-evenly;
+}
+.set-your-alarm select {
+  padding: 10px;
+  font-size: 1.4rem;
+  background-color: transparent;
+  color: white;
+  border: 0px solid transparent;
+}
+.set-your-alarm select:focus-visible {
+  outline: none;
+}
+.set-your-alarm select option {
+  color: #000;
+  background-color: transparent;
+}
+
+.submit-section {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: space-evenly;
+  -ms-flex-pack: space-evenly;
+  justify-content: space-evenly;
+}
+.submit-section input[type="file"] {
+  background-color: #141414;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: 1rem;
+}
+.submit-section #submit {
+  display: block;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+@-webkit-keyframes rotate {
+  from {
+    -webkit-filter: hue-rotate(0);
+    filter: hue-rotate(0);
+  }
+  to {
+    -webkit-filter: hue-rotate(360deg);
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes rotate {
+  from {
+    -webkit-filter: hue-rotate(0);
+    filter: hue-rotate(0);
+  }
+  to {
+    -webkit-filter: hue-rotate(360deg);
+    filter: hue-rotate(360deg);
+  }
+}
+
+/* Audio Player Controls */
+
+/* Base styling for the audio player container */
+.audio-player {
+  position: relative;
+  width: 400px;
+  margin: 20px auto;
+  background-color: #333;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom controls container */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Play/Pause button */
+.control-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+.control-btn:hover {
+  color: #f0f0f0;
+}
+
+/* Progress bar styling */
+.progress-bar {
+  width: 50%;
+  height: 5px;
+  background-color: #444;
+  margin: 0 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.progress-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.progress-bar::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Volume control styling */
+.volume-control {
+  width: 80px;
+  background-color: #444;
+  cursor: pointer;
+}
+
+.volume-control::-webkit-slider-thumb,
+.volume-control::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* Mute button */
+#mute-btn {
+  font-size: 16px;
+}
