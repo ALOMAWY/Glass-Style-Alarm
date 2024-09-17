@@ -201,6 +201,54 @@ body {
 
 /* Play/Pause button */
 
+#alarms-list {
+  width: fit-content;
+  height: fit-content;
+  max-height: 100%;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  letter-spacing: 3px;
+  background-color: #0000005b;
+  backdrop-filter: blur(5px);
+  padding: 1.4rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    // width: ;
+    border: 20px solid white;
+    border-color: transparent white transparent transparent;
+    top: 50%;
+    right: 100%;
+    transform: translateY(-50%);
+  }
+  div {
+    text-wrap: nowrap;
+    overflow: visible;
+    width: 210px;
+
+    p {
+      display: block;
+      margin: 0;
+      padding: 0;
+    }
+
+    .remove-alarm {
+      &:hover {
+        svg {
+          color: red;
+        }
+      }
+
+      svg {
+        transition: 0.02s;
+        color: #fff;
+      }
+    }
+  }
+}
+
 @media (max-width: 1570px) {
   .container {
     width: 50%;
@@ -218,6 +266,15 @@ body {
 
   .container {
     width: 80%;
+  }
+
+  #alarms-list.hidden {
+    width: 0;
+    padding: 0rem;
+    div {
+      overflow: hidden;
+      width: 0;
+    }
   }
 }
 

@@ -15,6 +15,24 @@ let minuteAlarm = document.getElementById("alarm-min");
 let dateAlarm = document.getElementById("alarm-date");
 let audioPlayer = document.querySelector(".audio-player");
 let alertAlarm = document.querySelector(".alert");
+let alarmsListContainer = document.getElementById("alarms-list");
+let alarmHolders = document.querySelectorAll(".alarm-holder");
+let arrayOfAlarmsDOM = Array.from(alarmHolders);
+let alarmsList = [
+    {
+        alarmDate: `${"03"} : ${"30"} : ${"AM"}`,
+        id: new Date(Date.now()).getTime(),
+    },
+];
+let alarmsInStorege = window.localStorage.getItem("alarms-list");
+if (alarmsInStorege) {
+    alarmsList = JSON.parse(alarmsInStorege);
+    createAlarmsDOM();
+}
+if (alarmsList.length == 0) {
+    if (alarmsListContainer)
+        alarmsListContainer.innerHTML = "There is no alarm.";
+}
 let files = document.getElementsByTagName("input")[0];
 let file;
 let fileURL;
@@ -56,7 +74,6 @@ function makeBlobUrl() {
         let alarmSrc = audio.src;
         try {
             let respownse = yield fetch(alarmSrc);
-            console.log(respownse);
             if (!respownse.ok)
                 throw new Error("Failed To Fetch File ");
             let audioBlob = yield respownse.blob();
@@ -80,33 +97,35 @@ function readyFile() {
     }
 }
 submitAlarm === null || submitAlarm === void 0 ? void 0 : submitAlarm.addEventListener("click", () => {
+    let alarmId = new Date(Date.now()).getTime();
+    createNewAlarm(`${hourAlarm.value} : ${minuteAlarm.value} : ${dateAlarm.value.toUpperCase()}`, alarmId);
     if (alertAlarm) {
         alertAlarm.innerHTML = `We will alert you at the hour : ${hourAlarm.value}:${minuteAlarm.value}:${dateAlarm.value}`;
         alertAlarm.style.animation = "dropAlert 5s 0s 1 ease-in-out forwards";
-        setTimeout(() => {
-            alertAlarm.style.animation = "none";
-        }, 3000);
+        // setTimeout(() => {
+        //   alertAlarm.style.animation = "none";
+        // }, 3000);
     }
-    let equalChecker = setInterval(() => {
-        if (HOURS == hourAlarm.value &&
-            MINUTES == minuteAlarm.value &&
-            DATE.toUpperCase() == dateAlarm.value.toUpperCase()) {
-            readyFile();
-            if (audioPlayer) {
-                audioPlayer.style.height = "fit-content";
-                audioPlayer.style.opacity = "1";
-            }
-            return clearInterval(equalChecker);
-        }
-        else {
-            if (audioPlayer) {
-                audioPlayer.style.height = "0";
-                audioPlayer.style.opacity = "0";
-            }
-            if (audio)
-                audio.pause();
-        }
-    }, 0);
+    // let equalChecker = setInterval(() => {
+    //   if (
+    //     HOURS == hourAlarm.value &&
+    //     MINUTES == minuteAlarm.value &&
+    //     DATE.toUpperCase() == dateAlarm.value.toUpperCase()
+    //   ) {
+    //     readyFile();
+    //     if (audioPlayer) {
+    //       audioPlayer.style.height = "fit-content";
+    //       audioPlayer.style.opacity = "1";
+    //     }
+    //     return clearInterval(equalChecker);
+    //   } else {
+    //     if (audioPlayer) {
+    //       audioPlayer.style.height = "0";
+    //       audioPlayer.style.opacity = "0";
+    //     }
+    //     if (audio) audio.pause();
+    //   }
+    // }, 0);
 });
 // Set Currnet Time On Login Website
 setCurrentValues();
@@ -117,6 +136,73 @@ dateAlarm.value = DATE.toLowerCase();
 setInterval(() => {
     setCurrentValues();
 }, 1000);
+function createNewAlarm(alarmDate, id) {
+    let newAlarm = {
+        alarmDate: alarmDate,
+        id: id,
+    };
+    let equal = false;
+    for (let i = 0; i < alarmsList.length; i++) {
+        if (alarmsList[i].alarmDate == newAlarm.alarmDate) {
+            equal = true;
+        }
+    }
+    if (!equal) {
+        alarmsList.push(newAlarm);
+        window.localStorage.setItem("alarms-list", JSON.stringify(alarmsList));
+        createAlarmsDOM();
+    }
+}
+function createAlarmsDOM() {
+    if (alarmsListContainer)
+        alarmsListContainer.innerHTML = ``;
+    alarmsList.forEach((e) => {
+        let alarmHolder = document.createElement("div");
+        alarmHolder.classList.add("alarm-holder", "d-flex", "align-items-center", "justify-content-between", "gap-4");
+        alarmHolder.setAttribute("data-id", `${e.id}`);
+        let alarmDate = document.createElement("p");
+        alarmDate.classList.add("text-white", "fs-2");
+        alarmDate.innerText = e.alarmDate;
+        alarmHolder.appendChild(alarmDate);
+        let alarmRemove = document.createElement("span");
+        alarmRemove.classList.add("remove-alarm", "d-block", "position-relative");
+        let clickLayer = document.createElement("span");
+        clickLayer.classList.add("remove", "position-absolute", "w-100", "h-100");
+        alarmRemove.appendChild(clickLayer);
+        let iconLayer = document.createElement("i");
+        iconLayer.classList.add("fa-solid", "fa-trash", "fs-3");
+        alarmRemove.appendChild(iconLayer);
+        alarmHolder.appendChild(alarmRemove);
+        if (alarmsListContainer)
+            alarmsListContainer.appendChild(alarmHolder);
+        alarmHolders = document.querySelectorAll(".alarm-holder");
+        arrayOfAlarmsDOM = Array.from(alarmHolders);
+        arrayOfAlarmsDOM.forEach((ele) => {
+            ele.addEventListener("click", (e) => checkDelete(e));
+        });
+    });
+}
+function checkDelete(e) {
+    var _a;
+    let target = e.target;
+    let holder = (_a = target.parentNode) === null || _a === void 0 ? void 0 : _a.parentNode;
+    let alarmId = holder.getAttribute("data-id");
+    if (target.classList.contains("remove"))
+        if (alarmId)
+            deleteAlarm(alarmId);
+    if ((alarmsListContainer === null || alarmsListContainer === void 0 ? void 0 : alarmsListContainer.innerHTML) == "")
+        alarmsListContainer.innerHTML = "There is no alarm.";
+}
+function deleteFromStorege(id) {
+    alarmsList = alarmsList.filter((e) => e.id != +id);
+    localStorage.setItem("alarms-list", JSON.stringify(alarmsList));
+}
+function deleteAlarm(id) {
+    deleteFromStorege(id);
+    let removedElement = document.querySelector(`div[data-id="${id}"]`);
+    removedElement === null || removedElement === void 0 ? void 0 : removedElement.remove();
+}
+alarmsListContainer === null || alarmsListContainer === void 0 ? void 0 : alarmsListContainer.addEventListener("click", () => alarmsListContainer === null || alarmsListContainer === void 0 ? void 0 : alarmsListContainer.classList.toggle("hidden"));
 // Audio Player Controls
 // Get references to the audio and controls
 const playPauseBtn = document.getElementById("play-pause");
@@ -130,7 +216,6 @@ const audioCurrnetSecunds = document.getElementById("audio-current-sec");
 const audioSpeedSelecteElement = document.getElementById("speed");
 const audioLoopBtn = document.getElementById("loop");
 audioSpeedSelecteElement.addEventListener("change", () => {
-    console.log(audioSpeedSelecteElement.value);
     if (audio) {
         audio.playbackRate = +audioSpeedSelecteElement.value;
     }

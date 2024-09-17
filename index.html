@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="css/library/bootstrap.min.css" />
     <link rel="stylesheet" href="css/library/all.min.css" />
     <link rel="stylesheet" href="css/library/normalize.css" />
-    <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/master.css" />
 
@@ -25,7 +24,7 @@
   <body>
     <div class="container">
       <div
-        class="alert text-white fs-5 text-uppercase fw-bold position-absolute top-0 start-50 "
+        class="alert text-white fs-5 text-uppercase fw-bold position-absolute top-0 start-50"
       >
         We will alert you at the hour.
       </div>
@@ -118,9 +117,9 @@
       <section class="submit-section">
         <input type="file" />
 
-        <button id="submit">Submit</button>
+        <button id="submit" class="py-3 px-5">Add</button>
       </section>
-      <div class="audio-player" >
+      <div class="audio-player">
         <audio id="audio" src="path_to_audio.mp3"></audio>
 
         <div
@@ -187,7 +186,10 @@
         </div>
       </div>
     </div>
-
+    <div
+      id="alarms-list"
+      class="border border-grey translate-middle-y text-white fs-5 text-uppercase d-flex flex-column align-items-center gap-5"
+    ></div>
     <audio id="audioPlayer" src="./assets/alarm_songs/HonaMarro.mp3"></audio>
 
     <script src="js/libs/bootstrap.bundle.min.js"></script>

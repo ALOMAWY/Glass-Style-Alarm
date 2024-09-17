@@ -252,6 +252,52 @@ body {
 }
 
 /* Play/Pause button */
+#alarms-list {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  max-height: 100%;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  letter-spacing: 3px;
+  background-color: rgba(0, 0, 0, 0.3568627451);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  padding: 1.4rem;
+}
+#alarms-list::before {
+  content: "";
+  position: absolute;
+  border: 20px solid white;
+  border-color: transparent white transparent transparent;
+  top: 50%;
+  right: 100%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+#alarms-list div {
+  text-wrap: nowrap;
+  overflow: visible;
+  width: 210px;
+}
+#alarms-list div p {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+#alarms-list div .remove-alarm:hover svg {
+  color: red;
+}
+#alarms-list div .remove-alarm svg {
+  -webkit-transition: 0.02s;
+  transition: 0.02s;
+  color: #fff;
+}
+
 @media (max-width: 1570px) {
   .container {
     width: 50%;
@@ -268,6 +314,14 @@ body {
   }
   .container {
     width: 80%;
+  }
+  #alarms-list.hidden {
+    width: 0;
+    padding: 0rem;
+  }
+  #alarms-list.hidden div {
+    overflow: hidden;
+    width: 0;
   }
 }
 @media (max-width: 764px) {
