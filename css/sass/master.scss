@@ -115,6 +115,25 @@ body {
   height: 0;
   opacity: 0;
   transition: 1.2s;
+
+  .options {
+    .circle {
+      width: 100px;
+      height: 100px;
+      padding: 10px;
+      background-color: #0000003b;
+      box-shadow: 0 0 10px -3px #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-wrap: wrap;
+      text-align: center;
+
+      &:hover {
+        background-color: #00000088;
+      }
+    }
+  }
 }
 
 /* Custom controls container */
@@ -212,17 +231,7 @@ body {
   background-color: #0000005b;
   backdrop-filter: blur(5px);
   padding: 1.4rem;
-
-  &::before {
-    content: "";
-    position: absolute;
-    // width: ;
-    border: 20px solid white;
-    border-color: transparent white transparent transparent;
-    top: 50%;
-    right: 100%;
-    transform: translateY(-50%);
-  }
+  color: #fff;
   div {
     text-wrap: nowrap;
     overflow: visible;
@@ -268,12 +277,26 @@ body {
     width: 80%;
   }
 
-  #alarms-list.hidden {
-    width: 0;
-    padding: 0rem;
-    div {
-      overflow: hidden;
+  #alarms-list {
+    &.hidden {
       width: 0;
+      padding: 0rem;
+      color: transparent;
+
+      div {
+        overflow: hidden;
+        width: 0;
+      }
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      border: 20px solid white;
+      border-color: transparent white transparent transparent;
+      top: 50%;
+      right: 100%;
+      transform: translateY(-50%);
     }
   }
 }

@@ -181,6 +181,28 @@ body {
   -webkit-transition: 1.2s;
   transition: 1.2s;
 }
+.audio-player .options .circle {
+  width: 100px;
+  height: 100px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.231372549);
+  -webkit-box-shadow: 0 0 10px -3px #000;
+          box-shadow: 0 0 10px -3px #000;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-wrap: wrap;
+  text-align: center;
+}
+.audio-player .options .circle:hover {
+  background-color: rgba(0, 0, 0, 0.5333333333);
+}
 
 /* Custom controls container */
 .controls {
@@ -268,16 +290,7 @@ body {
   -webkit-backdrop-filter: blur(5px);
           backdrop-filter: blur(5px);
   padding: 1.4rem;
-}
-#alarms-list::before {
-  content: "";
-  position: absolute;
-  border: 20px solid white;
-  border-color: transparent white transparent transparent;
-  top: 50%;
-  right: 100%;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
+  color: #fff;
 }
 #alarms-list div {
   text-wrap: nowrap;
@@ -318,10 +331,21 @@ body {
   #alarms-list.hidden {
     width: 0;
     padding: 0rem;
+    color: transparent;
   }
   #alarms-list.hidden div {
     overflow: hidden;
     width: 0;
+  }
+  #alarms-list::before {
+    content: "";
+    position: absolute;
+    border: 20px solid white;
+    border-color: transparent white transparent transparent;
+    top: 50%;
+    right: 100%;
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
   }
 }
 @media (max-width: 764px) {

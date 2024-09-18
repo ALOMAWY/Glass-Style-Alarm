@@ -9,15 +9,71 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 let time = document.getElementById("time");
-let submitAlarm = document.getElementById("submit");
+let HOURS = "12";
+let MINUTES = "22";
+let SECONDS = "36";
+let DATE = "AM";
 let hourAlarm = document.getElementById("alarm-hour");
 let minuteAlarm = document.getElementById("alarm-min");
 let dateAlarm = document.getElementById("alarm-date");
+function setCurrentValues() {
+    let currentTime = new Date(Date.now());
+    HOURS =
+        currentTime.getHours() < 10
+            ? `${"0" + currentTime.getHours()}`
+            : currentTime.getHours() > 12
+                ? `${currentTime.getHours() - 12}`
+                : `${currentTime.getHours()}`;
+    MINUTES =
+        currentTime.getMinutes() < 10
+            ? `${"0" + currentTime.getMinutes()}`
+            : `${currentTime.getMinutes()}`;
+    SECONDS =
+        currentTime.getSeconds() < 10
+            ? `${0 + currentTime.getSeconds()}`
+            : `${currentTime.getSeconds()}`;
+    DATE = currentTime.getHours() < 12 ? "AM" : "PM";
+    if (time)
+        time.innerHTML = `${HOURS}:${MINUTES}:${SECONDS} ${DATE}`;
+}
+// Set Currnet Time On Login Website
+setCurrentValues();
+// Update Time Each All Second
+setInterval(() => {
+    setCurrentValues();
+}, 1000);
+hourAlarm.value = HOURS;
+minuteAlarm.value = MINUTES;
+dateAlarm.value = DATE.toLowerCase();
+let submitAlarm = document.getElementById("submit");
 let audioPlayer = document.querySelector(".audio-player");
 let alertAlarm = document.querySelector(".alert");
 let alarmsListContainer = document.getElementById("alarms-list");
 let alarmHolders = document.querySelectorAll(".alarm-holder");
 let arrayOfAlarmsDOM = Array.from(alarmHolders);
+let cancelAlarm = document.getElementById("cancel-alarm");
+let snoozeAlarm = document.getElementById("snooze-alarm");
+let audio = document.getElementById("audioPlayer");
+window.addEventListener("load", () => {
+    // Start Check Alarms
+    alarmCheck();
+});
+// Make Blob URL From Default Alarm Song
+function makeBlobUrl() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let alarmSrc = audio.src;
+        try {
+            let respownse = yield fetch(alarmSrc);
+            if (!respownse.ok)
+                throw new Error("Failed To Fetch File ");
+            let audioBlob = yield respownse.blob();
+            let blobUrl = URL.createObjectURL(audioBlob);
+            audio.src = blobUrl;
+        }
+        catch (_a) { }
+    });
+}
+makeBlobUrl();
 let alarmsList = [
     {
         alarmDate: `${"03"} : ${"30"} : ${"AM"}`,
@@ -41,60 +97,72 @@ files.addEventListener("change", (e) => {
     if (target.files) {
         file = target.files[0];
     }
+    // localStorage.setItem("file", JSON.stringify(file));
     fileURL = URL.createObjectURL(file);
 });
-let HOURS = "12";
-let MINUTES = "22";
-let SECONDS = "36";
-let DATE = "AM";
-function setCurrentValues() {
-    let currentTime = new Date(Date.now());
-    HOURS =
-        currentTime.getHours() < 10
-            ? `${"0" + currentTime.getHours()}`
-            : currentTime.getHours() > 12
-                ? `${currentTime.getHours() - 12}`
-                : `${currentTime.getHours()}`;
-    MINUTES =
-        currentTime.getMinutes() < 10
-            ? `${"0" + currentTime.getMinutes()}`
-            : `${currentTime.getMinutes()}`;
-    SECONDS =
-        currentTime.getSeconds() < 10
-            ? `${0 + currentTime.getSeconds()}`
-            : `${currentTime.getSeconds()}`;
-    DATE = currentTime.getHours() < 12 ? "AM" : "PM";
-    if (time)
-        time.innerHTML = `${HOURS}:${MINUTES}:${SECONDS} ${DATE}`;
-}
-let audio = document.getElementById("audioPlayer");
-// Make Blob URL From Default Alarm Song
-function makeBlobUrl() {
-    return __awaiter(this, void 0, void 0, function* () {
-        let alarmSrc = audio.src;
-        try {
-            let respownse = yield fetch(alarmSrc);
-            if (!respownse.ok)
-                throw new Error("Failed To Fetch File ");
-            let audioBlob = yield respownse.blob();
-            let blobUrl = URL.createObjectURL(audioBlob);
-            audio.src = blobUrl;
-        }
-        catch (_a) { }
-    });
-}
-makeBlobUrl();
 // Create URL Of File And Play It
-function readyFile() {
+// Create Alarm Player And Actions
+function playAlarm() {
+    resetAudio();
     if (file) {
-        if (file.type.startsWith("audio")) {
-            audio.src = fileURL;
-            audio.play();
-        }
+        if (file.type.startsWith("audio"))
+            if (fileURL)
+                audio.src = fileURL;
+        audio
+            .play()
+            .then(() => {
+            if (audioPlayer) {
+                audioPlayer.style.height = "fit-content";
+                audioPlayer.style.opacity = "1";
+            }
+        })
+            .catch(() => {
+            if (audioPlayer) {
+                audioPlayer.style.height = "0";
+                audioPlayer.style.opacity = "0";
+            }
+        });
     }
     else {
-        audio.play();
+        audio
+            .play()
+            .then(() => {
+            if (audioPlayer) {
+                audioPlayer.style.height = "fit-content";
+                audioPlayer.style.opacity = "1";
+            }
+        })
+            .catch(() => {
+            if (audioPlayer) {
+                audioPlayer.style.height = "0";
+                audioPlayer.style.opacity = "0";
+            }
+        });
     }
+}
+function resetAudio() {
+    audio.currentTime = 0;
+    audio.volume = 1;
+    volumeControl.value = "0.01";
+}
+// Check If There Alarm Or Not Status
+let checking = true;
+// Check Second Per Second For Alarms
+function alarmCheck() {
+    checking = true;
+    let checker = setInterval(() => {
+        let currnetDate = `${HOURS} : ${MINUTES} : ${DATE}`;
+        alarmsList.forEach((e) => {
+            if (e.alarmDate == currnetDate) {
+                console.log(e.alarmDate);
+                console.log(currnetDate);
+                playAlarm();
+                clearInterval(checker);
+                // Diseble Checking Alarms Holder
+                checking = false;
+            }
+        });
+    }, 1000);
 }
 submitAlarm === null || submitAlarm === void 0 ? void 0 : submitAlarm.addEventListener("click", () => {
     let alarmId = new Date(Date.now()).getTime();
@@ -102,40 +170,11 @@ submitAlarm === null || submitAlarm === void 0 ? void 0 : submitAlarm.addEventLi
     if (alertAlarm) {
         alertAlarm.innerHTML = `We will alert you at the hour : ${hourAlarm.value}:${minuteAlarm.value}:${dateAlarm.value}`;
         alertAlarm.style.animation = "dropAlert 5s 0s 1 ease-in-out forwards";
-        // setTimeout(() => {
-        //   alertAlarm.style.animation = "none";
-        // }, 3000);
+        setTimeout(() => {
+            alertAlarm.style.animation = "none";
+        }, 3000);
     }
-    // let equalChecker = setInterval(() => {
-    //   if (
-    //     HOURS == hourAlarm.value &&
-    //     MINUTES == minuteAlarm.value &&
-    //     DATE.toUpperCase() == dateAlarm.value.toUpperCase()
-    //   ) {
-    //     readyFile();
-    //     if (audioPlayer) {
-    //       audioPlayer.style.height = "fit-content";
-    //       audioPlayer.style.opacity = "1";
-    //     }
-    //     return clearInterval(equalChecker);
-    //   } else {
-    //     if (audioPlayer) {
-    //       audioPlayer.style.height = "0";
-    //       audioPlayer.style.opacity = "0";
-    //     }
-    //     if (audio) audio.pause();
-    //   }
-    // }, 0);
 });
-// Set Currnet Time On Login Website
-setCurrentValues();
-hourAlarm.value = HOURS;
-minuteAlarm.value = MINUTES;
-dateAlarm.value = DATE.toLowerCase();
-// Update Time Each All Second
-setInterval(() => {
-    setCurrentValues();
-}, 1000);
 function createNewAlarm(alarmDate, id) {
     let newAlarm = {
         alarmDate: alarmDate,
@@ -252,6 +291,14 @@ function updatePlayerTimeValues() {
             audioCurrnetSecunds.innerText = `${currentSecund < 10 ? "0" + currentSecund : currentSecund}`;
     }, 0);
 }
+// Close The Audio Player And Pause Audio
+function closeAudioPlayer() {
+    audio.pause();
+    if (audioPlayer) {
+        audioPlayer.style.height = "0";
+        audioPlayer.style.opacity = "0";
+    }
+}
 playPauseBtn === null || playPauseBtn === void 0 ? void 0 : playPauseBtn.addEventListener("click", function () {
     if (audio.paused || audio.ended) {
         audio.play();
@@ -298,4 +345,22 @@ audio === null || audio === void 0 ? void 0 : audio.addEventListener("play", () 
 });
 audio === null || audio === void 0 ? void 0 : audio.addEventListener("loadedmetadata", () => {
     updatePlayerTimeValues();
+});
+snoozeAlarm === null || snoozeAlarm === void 0 ? void 0 : snoozeAlarm.addEventListener("click", () => {
+    closeAudioPlayer();
+    let excludeSeconds = 60 - +SECONDS;
+    setTimeout(() => {
+        alarmCheck();
+    }, excludeSeconds * 1000);
+    let tenMinutesWithMilleSeconds = 10 * 1000;
+    setTimeout(() => {
+        playAlarm();
+    }, tenMinutesWithMilleSeconds);
+});
+cancelAlarm === null || cancelAlarm === void 0 ? void 0 : cancelAlarm.addEventListener("click", () => {
+    closeAudioPlayer();
+    let excludeSeconds = 60 - +SECONDS;
+    setTimeout(() => {
+        alarmCheck();
+    }, excludeSeconds * 1000);
 });

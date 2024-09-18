@@ -1,6 +1,12 @@
 let time = document.getElementById("time");
 
-let submitAlarm = document.getElementById("submit");
+let HOURS: string = "12";
+
+let MINUTES: string = "22";
+
+let SECONDS: string = "36";
+
+let DATE: string = "AM";
 
 let hourAlarm = document.getElementById("alarm-hour") as HTMLSelectElement;
 
@@ -8,7 +14,48 @@ let minuteAlarm = document.getElementById("alarm-min") as HTMLSelectElement;
 
 let dateAlarm = document.getElementById("alarm-date") as HTMLSelectElement;
 
-let audioPlayer = document.querySelector(".audio-player") as HTMLElement;
+function setCurrentValues() {
+  let currentTime = new Date(Date.now());
+
+  HOURS =
+    currentTime.getHours() < 10
+      ? `${"0" + currentTime.getHours()}`
+      : currentTime.getHours() > 12
+      ? `${currentTime.getHours() - 12}`
+      : `${currentTime.getHours()}`;
+
+  MINUTES =
+    currentTime.getMinutes() < 10
+      ? `${"0" + currentTime.getMinutes()}`
+      : `${currentTime.getMinutes()}`;
+
+  SECONDS =
+    currentTime.getSeconds() < 10
+      ? `${0 + currentTime.getSeconds()}`
+      : `${currentTime.getSeconds()}`;
+
+  DATE = currentTime.getHours() < 12 ? "AM" : "PM";
+
+  if (time) time.innerHTML = `${HOURS}:${MINUTES}:${SECONDS} ${DATE}`;
+}
+
+// Set Currnet Time On Login Website
+setCurrentValues();
+
+// Update Time Each All Second
+setInterval(() => {
+  setCurrentValues();
+}, 1000);
+
+hourAlarm.value = HOURS;
+
+minuteAlarm.value = MINUTES;
+
+dateAlarm.value = DATE.toLowerCase();
+
+let submitAlarm = document.getElementById("submit");
+
+let audioPlayer = document.querySelector(".audio-player") as HTMLElement | null;
 
 let alertAlarm = document.querySelector(".alert") as HTMLElement;
 
@@ -18,12 +65,43 @@ let alarmHolders = document.querySelectorAll(".alarm-holder");
 
 let arrayOfAlarmsDOM = Array.from(alarmHolders);
 
+let cancelAlarm = document.getElementById("cancel-alarm");
+
+let snoozeAlarm = document.getElementById("snooze-alarm");
+
+let audio = document.getElementById("audioPlayer") as HTMLAudioElement;
+
+window.addEventListener("load", () => {
+  // Start Check Alarms
+  alarmCheck();
+});
+
+// Make Blob URL From Default Alarm Song
+
+async function makeBlobUrl() {
+  let alarmSrc = audio.src;
+
+  try {
+    let respownse = await fetch(alarmSrc);
+
+    if (!respownse.ok) throw new Error("Failed To Fetch File ");
+
+    let audioBlob = await respownse.blob();
+
+    let blobUrl = URL.createObjectURL(audioBlob);
+
+    audio.src = blobUrl;
+  } catch {}
+}
+makeBlobUrl();
+
 let alarmsList = [
   {
     alarmDate: `${"03"} : ${"30"} : ${"AM"}`,
     id: new Date(Date.now()).getTime(),
   },
 ];
+
 let alarmsInStorege = window.localStorage.getItem("alarms-list");
 
 if (alarmsInStorege) {
@@ -53,73 +131,80 @@ files.addEventListener("change", (e) => {
     file = target.files[0];
   }
 
+  // localStorage.setItem("file", JSON.stringify(file));
+
   fileURL = URL.createObjectURL(file);
 });
 
-let HOURS: string = "12";
-
-let MINUTES: string = "22";
-
-let SECONDS: string = "36";
-
-let DATE: string = "AM";
-
-function setCurrentValues() {
-  let currentTime = new Date(Date.now());
-
-  HOURS =
-    currentTime.getHours() < 10
-      ? `${"0" + currentTime.getHours()}`
-      : currentTime.getHours() > 12
-      ? `${currentTime.getHours() - 12}`
-      : `${currentTime.getHours()}`;
-
-  MINUTES =
-    currentTime.getMinutes() < 10
-      ? `${"0" + currentTime.getMinutes()}`
-      : `${currentTime.getMinutes()}`;
-
-  SECONDS =
-    currentTime.getSeconds() < 10
-      ? `${0 + currentTime.getSeconds()}`
-      : `${currentTime.getSeconds()}`;
-
-  DATE = currentTime.getHours() < 12 ? "AM" : "PM";
-
-  if (time) time.innerHTML = `${HOURS}:${MINUTES}:${SECONDS} ${DATE}`;
-}
-
-let audio = document.getElementById("audioPlayer") as HTMLAudioElement;
-
-// Make Blob URL From Default Alarm Song
-
-async function makeBlobUrl() {
-  let alarmSrc = audio.src;
-
-  try {
-    let respownse = await fetch(alarmSrc);
-
-    if (!respownse.ok) throw new Error("Failed To Fetch File ");
-
-    let audioBlob = await respownse.blob();
-
-    let blobUrl = URL.createObjectURL(audioBlob);
-
-    audio.src = blobUrl;
-  } catch {}
-}
-makeBlobUrl();
 // Create URL Of File And Play It
-function readyFile() {
-  if (file) {
-    if (file.type.startsWith("audio")) {
-      audio.src = fileURL;
 
-      audio.play();
-    }
+// Create Alarm Player And Actions
+function playAlarm() {
+  resetAudio();
+  if (file) {
+    if (file.type.startsWith("audio")) if (fileURL) audio.src = fileURL;
+    audio
+      .play()
+      .then(() => {
+        if (audioPlayer) {
+          audioPlayer.style.height = "fit-content";
+          audioPlayer.style.opacity = "1";
+        }
+      })
+      .catch(() => {
+        if (audioPlayer) {
+          audioPlayer.style.height = "0";
+          audioPlayer.style.opacity = "0";
+        }
+      });
   } else {
-    audio.play();
+    audio
+      .play()
+      .then(() => {
+        if (audioPlayer) {
+          audioPlayer.style.height = "fit-content";
+          audioPlayer.style.opacity = "1";
+        }
+      })
+      .catch(() => {
+        if (audioPlayer) {
+          audioPlayer.style.height = "0";
+          audioPlayer.style.opacity = "0";
+        }
+      });
   }
+}
+
+function resetAudio() {
+  audio.currentTime = 0;
+
+  audio.volume = 1;
+
+  volumeControl.value = "0.01";
+}
+
+// Check If There Alarm Or Not Status
+let checking = true;
+
+// Check Second Per Second For Alarms
+function alarmCheck() {
+  checking = true;
+
+  let checker = setInterval(() => {
+    let currnetDate = `${HOURS} : ${MINUTES} : ${DATE}`;
+    alarmsList.forEach((e) => {
+      if (e.alarmDate == currnetDate) {
+        console.log(e.alarmDate);
+        console.log(currnetDate);
+        playAlarm();
+
+        clearInterval(checker);
+
+        // Diseble Checking Alarms Holder
+        checking = false;
+      }
+    });
+  }, 1000);
 }
 
 submitAlarm?.addEventListener("click", () => {
@@ -135,43 +220,11 @@ submitAlarm?.addEventListener("click", () => {
     alertAlarm.innerHTML = `We will alert you at the hour : ${hourAlarm.value}:${minuteAlarm.value}:${dateAlarm.value}`;
     alertAlarm.style.animation = "dropAlert 5s 0s 1 ease-in-out forwards";
 
-    // setTimeout(() => {
-    //   alertAlarm.style.animation = "none";
-    // }, 3000);
+    setTimeout(() => {
+      alertAlarm.style.animation = "none";
+    }, 3000);
   }
-  // let equalChecker = setInterval(() => {
-  //   if (
-  //     HOURS == hourAlarm.value &&
-  //     MINUTES == minuteAlarm.value &&
-  //     DATE.toUpperCase() == dateAlarm.value.toUpperCase()
-  //   ) {
-  //     readyFile();
-  //     if (audioPlayer) {
-  //       audioPlayer.style.height = "fit-content";
-  //       audioPlayer.style.opacity = "1";
-  //     }
-
-  //     return clearInterval(equalChecker);
-  //   } else {
-  //     if (audioPlayer) {
-  //       audioPlayer.style.height = "0";
-  //       audioPlayer.style.opacity = "0";
-  //     }
-  //     if (audio) audio.pause();
-  //   }
-  // }, 0);
 });
-
-// Set Currnet Time On Login Website
-setCurrentValues();
-hourAlarm.value = HOURS;
-minuteAlarm.value = MINUTES;
-dateAlarm.value = DATE.toLowerCase();
-
-// Update Time Each All Second
-setInterval(() => {
-  setCurrentValues();
-}, 1000);
 
 function createNewAlarm(alarmDate: string, id: number) {
   let newAlarm = {
@@ -203,8 +256,7 @@ function createAlarmsDOM() {
       "d-flex",
       "align-items-center",
       "justify-content-between",
-      "gap-4",
-      
+      "gap-4"
     );
 
     alarmHolder.setAttribute("data-id", `${e.id}`);
@@ -358,6 +410,16 @@ function updatePlayerTimeValues() {
   }, 0);
 }
 
+// Close The Audio Player And Pause Audio
+function closeAudioPlayer() {
+  audio.pause();
+
+  if (audioPlayer) {
+    audioPlayer.style.height = "0";
+    audioPlayer.style.opacity = "0";
+  }
+}
+
 playPauseBtn?.addEventListener("click", function () {
   if (audio.paused || audio.ended) {
     audio.play();
@@ -406,4 +468,30 @@ audio?.addEventListener("play", () => {
 
 audio?.addEventListener("loadedmetadata", () => {
   updatePlayerTimeValues();
+});
+
+snoozeAlarm?.addEventListener("click", () => {
+  closeAudioPlayer();
+
+  let excludeSeconds: number = 60 - +SECONDS;
+
+  setTimeout(() => {
+    alarmCheck();
+  }, excludeSeconds * 1000);
+
+  let tenMinutesWithMilleSeconds = 10 * 1000;
+
+  setTimeout(() => {
+    playAlarm();
+  }, tenMinutesWithMilleSeconds);
+});
+
+cancelAlarm?.addEventListener("click", () => {
+  closeAudioPlayer();
+
+  let excludeSeconds: number = 60 - +SECONDS;
+
+  setTimeout(() => {
+    alarmCheck();
+  }, excludeSeconds * 1000);
 });
