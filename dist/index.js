@@ -30,21 +30,16 @@ function setCurrentValues() {
             : `${currentTime.getMinutes()}`;
     SECONDS =
         currentTime.getSeconds() < 10
-            ? `${0 + currentTime.getSeconds()}`
+            ? `${"0" + currentTime.getSeconds()}`
             : `${currentTime.getSeconds()}`;
     DATE = currentTime.getHours() < 12 ? "AM" : "PM";
     if (time)
-        time.innerHTML = `${HOURS}:${MINUTES}:${SECONDS} ${DATE}`;
+        time.innerHTML = `${HOURS} : ${MINUTES} : ${SECONDS} ${DATE}`;
 }
-// Set Currnet Time On Login Website
-setCurrentValues();
 // Update Time Each All Second
 setInterval(() => {
     setCurrentValues();
 }, 1000);
-hourAlarm.value = HOURS;
-minuteAlarm.value = MINUTES;
-dateAlarm.value = DATE.toLowerCase();
 let submitAlarm = document.getElementById("submit");
 let audioPlayer = document.querySelector(".audio-player");
 let alertAlarm = document.querySelector(".alert");
@@ -57,6 +52,13 @@ let audio = document.getElementById("audioPlayer");
 window.addEventListener("load", () => {
     // Start Check Alarms
     alarmCheck();
+    // Set Currnet Time On Login Website
+    setCurrentValues();
+    hourAlarm.value = HOURS;
+    minuteAlarm.value = MINUTES;
+    dateAlarm.value = DATE.toLowerCase();
+    // Make Blob URL From Default Audio SONG
+    makeBlobUrl();
 });
 // Make Blob URL From Default Alarm Song
 function makeBlobUrl() {
@@ -73,7 +75,6 @@ function makeBlobUrl() {
         catch (_a) { }
     });
 }
-makeBlobUrl();
 let alarmsList = [
     {
         alarmDate: `${"03"} : ${"30"} : ${"AM"}`,
@@ -97,7 +98,8 @@ files.addEventListener("change", (e) => {
     if (target.files) {
         file = target.files[0];
     }
-    // localStorage.setItem("file", JSON.stringify(file));
+    localStorage.setItem("file", JSON.stringify(file));
+    console.log(file);
     fileURL = URL.createObjectURL(file);
 });
 // Create URL Of File And Play It
@@ -143,7 +145,7 @@ function playAlarm() {
 function resetAudio() {
     audio.currentTime = 0;
     audio.volume = 1;
-    volumeControl.value = "0.01";
+    volumeControl.value = "1";
 }
 // Check If There Alarm Or Not Status
 let checking = true;
@@ -151,6 +153,7 @@ let checking = true;
 function alarmCheck() {
     checking = true;
     let checker = setInterval(() => {
+        console.log("CHECK");
         let currnetDate = `${HOURS} : ${MINUTES} : ${DATE}`;
         alarmsList.forEach((e) => {
             if (e.alarmDate == currnetDate) {
@@ -352,7 +355,7 @@ snoozeAlarm === null || snoozeAlarm === void 0 ? void 0 : snoozeAlarm.addEventLi
     setTimeout(() => {
         alarmCheck();
     }, excludeSeconds * 1000);
-    let tenMinutesWithMilleSeconds = 10 * 1000;
+    let tenMinutesWithMilleSeconds = 10 * 60000;
     setTimeout(() => {
         playAlarm();
     }, tenMinutesWithMilleSeconds);

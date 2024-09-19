@@ -30,6 +30,15 @@
 }
 
 body {
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  overflow: hidden;
+  -webkit-box-shadow: 0 0 50px #000 inset;
+          box-shadow: 0 0 50px #000 inset;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -43,29 +52,35 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  gap: 50px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: black;
-  min-height: 100vh;
+  background-image: url("https://4kwallpapers.com/images/walls/thumbs_3t/18778.jpeg");
+  background-size: cover;
+  background-position: 50%;
 }
 
 .container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  gap: 100px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  height: 100%;
+  gap: 100px;
   width: 40%;
+  height: 100%;
+  padding: 7rem 1rem;
+  border-radius: 20px;
+  border: 1px solid white;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  -webkit-box-shadow: 0 0 10px #000000;
+          box-shadow: 0 0 10px #000000;
 }
 
 .alert {
@@ -100,7 +115,7 @@ body {
 }
 .set-your-alarm select {
   padding: 10px;
-  font-size: 1.4rem;
+  font-size: 2rem;
   background-color: transparent;
   color: white;
   border: 0px solid transparent;
@@ -110,7 +125,9 @@ body {
 }
 .set-your-alarm select option {
   color: #000;
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.3764705882);
+  -webkit-backdrop-filter: blur(6px-);
+          backdrop-filter: blur(6px-);
 }
 
 .submit-section {
@@ -126,7 +143,7 @@ body {
           justify-content: space-evenly;
 }
 .submit-section input[type=file] {
-  background-color: #141414;
+  background-color: transparent;
   font-size: 1rem;
   padding: 20px;
   border-radius: 7px;
@@ -134,13 +151,21 @@ body {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+  border: 1px solid white;
 }
 .submit-section #submit {
   display: block;
-  padding: 5px 10px;
-  border-radius: 6px;
   font-weight: bold;
+  padding: 15px 30px;
+  background-color: transparent;
   text-transform: uppercase;
+  color: white;
+  outline: none;
+  border-radius: 6px;
+  border: 1px solid white;
+}
+.submit-section #submit:focus {
+  outline: none;
 }
 
 @-webkit-keyframes rotate {
@@ -167,17 +192,16 @@ body {
 /* Audio Player Controls */
 /* Base styling for the audio player container */
 .audio-player {
-  position: relative;
   width: 60%;
   margin: 20px auto;
-  background-color: #333;
+  -webkit-backdrop-filter: blur(50px);
+          backdrop-filter: blur(50px);
+  background-color: rgba(0, 0, 0, 0.4117647059);
   padding: 15px;
   border-radius: 10px;
-  -webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0 10px #000000;
+          box-shadow: 0 0 10px #000000;
   overflow: hidden;
-  height: 0;
-  opacity: 0;
   -webkit-transition: 1.2s;
   transition: 1.2s;
 }
@@ -214,7 +238,7 @@ body {
   background: none;
   border: none;
   color: white;
-  font-size: 16px;
+  font-size: 3rem;
   cursor: pointer;
   padding: 5px 10px;
 }
@@ -286,10 +310,12 @@ body {
   right: 0;
   top: 50%;
   letter-spacing: 3px;
-  background-color: rgba(0, 0, 0, 0.3568627451);
   -webkit-backdrop-filter: blur(5px);
           backdrop-filter: blur(5px);
-  padding: 1.4rem;
+  padding: 2rem;
+  border-radius: 20px 0 0 20px;
+  -webkit-box-shadow: 0 0 10px #000000;
+          box-shadow: 0 0 10px #000000;
   color: #fff;
 }
 #alarms-list div {

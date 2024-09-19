@@ -16,21 +16,15 @@ function setCurrentValues() {
   var currentTime = new Date(Date.now());
   HOURS = currentTime.getHours() < 10 ? "".concat("0" + currentTime.getHours()) : currentTime.getHours() > 12 ? "".concat(currentTime.getHours() - 12) : "".concat(currentTime.getHours());
   MINUTES = currentTime.getMinutes() < 10 ? "".concat("0" + currentTime.getMinutes()) : "".concat(currentTime.getMinutes());
-  SECONDS = currentTime.getSeconds() < 10 ? "".concat(0 + currentTime.getSeconds()) : "".concat(currentTime.getSeconds());
+  SECONDS = currentTime.getSeconds() < 10 ? "".concat("0" + currentTime.getSeconds()) : "".concat(currentTime.getSeconds());
   DATE = currentTime.getHours() < 12 ? "AM" : "PM";
-  if (time) time.innerHTML = "".concat(HOURS, ":").concat(MINUTES, ":").concat(SECONDS, " ").concat(DATE);
+  if (time) time.innerHTML = "".concat(HOURS, " : ").concat(MINUTES, " : ").concat(SECONDS, " ").concat(DATE);
 }
-
-// Set Currnet Time On Login Website
-setCurrentValues();
 
 // Update Time Each All Second
 setInterval(function () {
   setCurrentValues();
 }, 1000);
-hourAlarm.value = HOURS;
-minuteAlarm.value = MINUTES;
-dateAlarm.value = DATE.toLowerCase();
 var submitAlarm = document.getElementById("submit");
 var audioPlayer = document.querySelector(".audio-player");
 var alertAlarm = document.querySelector(".alert");
@@ -43,6 +37,15 @@ var audio = document.getElementById("audioPlayer");
 window.addEventListener("load", function () {
   // Start Check Alarms
   alarmCheck();
+
+  // Set Currnet Time On Login Website
+  setCurrentValues();
+  hourAlarm.value = HOURS;
+  minuteAlarm.value = MINUTES;
+  dateAlarm.value = DATE.toLowerCase();
+
+  // Make Blob URL From Default Audio SONG
+  makeBlobUrl();
 });
 
 // Make Blob URL From Default Alarm Song
@@ -86,7 +89,6 @@ function _makeBlobUrl() {
   }));
   return _makeBlobUrl.apply(this, arguments);
 }
-makeBlobUrl();
 var alarmsList = [{
   alarmDate: "03".concat(" : ", "30", " : ", "AM"),
   id: new Date(Date.now()).getTime()
@@ -107,9 +109,8 @@ files.addEventListener("change", function (e) {
   if (target.files) {
     file = target.files[0];
   }
-
-  // localStorage.setItem("file", JSON.stringify(file));
-
+  localStorage.setItem("file", JSON.stringify(file));
+  console.log(file);
   fileURL = URL.createObjectURL(file);
 });
 
@@ -148,7 +149,7 @@ function playAlarm() {
 function resetAudio() {
   audio.currentTime = 0;
   audio.volume = 1;
-  volumeControl.value = "0.01";
+  volumeControl.value = "1";
 }
 
 // Check If There Alarm Or Not Status
@@ -158,6 +159,7 @@ var checking = true;
 function alarmCheck() {
   checking = true;
   var checker = setInterval(function () {
+    console.log("CHECK");
     var currnetDate = "".concat(HOURS, " : ").concat(MINUTES, " : ").concat(DATE);
     alarmsList.forEach(function (e) {
       if (e.alarmDate == currnetDate) {
@@ -359,7 +361,7 @@ snoozeAlarm === null || snoozeAlarm === void 0 || snoozeAlarm.addEventListener("
   setTimeout(function () {
     alarmCheck();
   }, excludeSeconds * 1000);
-  var tenMinutesWithMilleSeconds = 10 * 1000;
+  var tenMinutesWithMilleSeconds = 10 * 60000;
   setTimeout(function () {
     playAlarm();
   }, tenMinutesWithMilleSeconds);

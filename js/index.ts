@@ -31,27 +31,18 @@ function setCurrentValues() {
 
   SECONDS =
     currentTime.getSeconds() < 10
-      ? `${0 + currentTime.getSeconds()}`
+      ? `${"0" + currentTime.getSeconds()}`
       : `${currentTime.getSeconds()}`;
 
   DATE = currentTime.getHours() < 12 ? "AM" : "PM";
 
-  if (time) time.innerHTML = `${HOURS}:${MINUTES}:${SECONDS} ${DATE}`;
+  if (time) time.innerHTML = `${HOURS} : ${MINUTES} : ${SECONDS} ${DATE}`;
 }
-
-// Set Currnet Time On Login Website
-setCurrentValues();
 
 // Update Time Each All Second
 setInterval(() => {
   setCurrentValues();
 }, 1000);
-
-hourAlarm.value = HOURS;
-
-minuteAlarm.value = MINUTES;
-
-dateAlarm.value = DATE.toLowerCase();
 
 let submitAlarm = document.getElementById("submit");
 
@@ -74,6 +65,18 @@ let audio = document.getElementById("audioPlayer") as HTMLAudioElement;
 window.addEventListener("load", () => {
   // Start Check Alarms
   alarmCheck();
+
+  // Set Currnet Time On Login Website
+  setCurrentValues();
+
+  hourAlarm.value = HOURS;
+
+  minuteAlarm.value = MINUTES;
+
+  dateAlarm.value = DATE.toLowerCase();
+
+  // Make Blob URL From Default Audio SONG
+  makeBlobUrl();
 });
 
 // Make Blob URL From Default Alarm Song
@@ -93,7 +96,6 @@ async function makeBlobUrl() {
     audio.src = blobUrl;
   } catch {}
 }
-makeBlobUrl();
 
 let alarmsList = [
   {
@@ -131,7 +133,8 @@ files.addEventListener("change", (e) => {
     file = target.files[0];
   }
 
-  // localStorage.setItem("file", JSON.stringify(file));
+  localStorage.setItem("file", JSON.stringify(file));
+  console.log(file);
 
   fileURL = URL.createObjectURL(file);
 });
@@ -180,7 +183,7 @@ function resetAudio() {
 
   audio.volume = 1;
 
-  volumeControl.value = "0.01";
+  volumeControl.value = "1";
 }
 
 // Check If There Alarm Or Not Status
@@ -191,6 +194,7 @@ function alarmCheck() {
   checking = true;
 
   let checker = setInterval(() => {
+    console.log("CHECK");
     let currnetDate = `${HOURS} : ${MINUTES} : ${DATE}`;
     alarmsList.forEach((e) => {
       if (e.alarmDate == currnetDate) {
@@ -479,7 +483,7 @@ snoozeAlarm?.addEventListener("click", () => {
     alarmCheck();
   }, excludeSeconds * 1000);
 
-  let tenMinutesWithMilleSeconds = 10 * 1000;
+  let tenMinutesWithMilleSeconds = 10 * 60000;
 
   setTimeout(() => {
     playAlarm();
