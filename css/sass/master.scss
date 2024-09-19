@@ -46,6 +46,15 @@ body {
 
 .alert {
   transform: translate(-200px, -300px);
+  padding: 14px;
+  backdrop-filter: blur(10px);
+  border: 1px solid;
+  z-index: 9;
+  width: 100%;
+  min-width: fit-content;
+  max-width: 100%;
+  border-radius: 11px;
+  text-align: center;
 }
 
 .clock {
@@ -303,6 +312,9 @@ body {
   }
 
   #alarms-list {
+    div {
+      width: 150px;
+    }
     &.hidden {
       width: 0;
       padding: 0rem;
