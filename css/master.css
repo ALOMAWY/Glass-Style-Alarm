@@ -192,6 +192,7 @@ body {
 /* Audio Player Controls */
 /* Base styling for the audio player container */
 .audio-player {
+  position: relative;
   width: 60%;
   margin: 20px auto;
   -webkit-backdrop-filter: blur(50px);
@@ -202,10 +203,12 @@ body {
   -webkit-box-shadow: 0 0 10px #000000;
           box-shadow: 0 0 10px #000000;
   overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
   -webkit-transition: 1.2s;
   transition: 1.2s;
 }
-.audio-player .options .circle {
+.audio-player + .options .circle {
   width: 100px;
   height: 100px;
   padding: 10px;
@@ -224,7 +227,7 @@ body {
   text-wrap: wrap;
   text-align: center;
 }
-.audio-player .options .circle:hover {
+.audio-player + .options .circle:hover {
   background-color: rgba(0, 0, 0, 0.5333333333);
 }
 
@@ -385,6 +388,8 @@ body {
 @media (max-width: 530px) {
   .container {
     width: 100%;
+    border-radius: 0;
+    padding: 2rem;
   }
   .audio-player {
     width: 90%;

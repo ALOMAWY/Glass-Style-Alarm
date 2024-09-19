@@ -150,14 +150,14 @@ function playAlarm() {
       .play()
       .then(() => {
         if (audioPlayer) {
-          audioPlayer.style.height = "fit-content";
           audioPlayer.style.opacity = "1";
+          audioPlayer.style.visibility = "visible";
         }
       })
       .catch(() => {
         if (audioPlayer) {
-          audioPlayer.style.height = "0";
           audioPlayer.style.opacity = "0";
+          audioPlayer.style.visibility = "hidden";
         }
       });
   } else {
@@ -165,14 +165,14 @@ function playAlarm() {
       .play()
       .then(() => {
         if (audioPlayer) {
-          audioPlayer.style.height = "fit-content";
           audioPlayer.style.opacity = "1";
+          audioPlayer.style.visibility = "visible";
         }
       })
       .catch(() => {
         if (audioPlayer) {
-          audioPlayer.style.height = "0";
           audioPlayer.style.opacity = "0";
+          audioPlayer.style.visibility = "hidden";
         }
       });
   }
@@ -419,7 +419,6 @@ function closeAudioPlayer() {
   audio.pause();
 
   if (audioPlayer) {
-    audioPlayer.style.height = "0";
     audioPlayer.style.opacity = "0";
   }
 }

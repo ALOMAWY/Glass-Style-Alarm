@@ -123,25 +123,25 @@ function playAlarm() {
     if (file.type.startsWith("audio")) if (fileURL) audio.src = fileURL;
     audio.play().then(function () {
       if (audioPlayer) {
-        audioPlayer.style.height = "fit-content";
         audioPlayer.style.opacity = "1";
+        audioPlayer.style.visibility = "visible";
       }
     }).catch(function () {
       if (audioPlayer) {
-        audioPlayer.style.height = "0";
         audioPlayer.style.opacity = "0";
+        audioPlayer.style.visibility = "hidden";
       }
     });
   } else {
     audio.play().then(function () {
       if (audioPlayer) {
-        audioPlayer.style.height = "fit-content";
         audioPlayer.style.opacity = "1";
+        audioPlayer.style.visibility = "visible";
       }
     }).catch(function () {
       if (audioPlayer) {
-        audioPlayer.style.height = "0";
         audioPlayer.style.opacity = "0";
+        audioPlayer.style.visibility = "hidden";
       }
     });
   }
@@ -307,7 +307,6 @@ function updatePlayerTimeValues() {
 function closeAudioPlayer() {
   audio.pause();
   if (audioPlayer) {
-    audioPlayer.style.height = "0";
     audioPlayer.style.opacity = "0";
   }
 }

@@ -128,7 +128,7 @@ body {
 
 /* Base styling for the audio player container */
 .audio-player {
-  // position: absolute;
+  position: relative;
   width: 60%;
   margin: 20px auto;
   backdrop-filter: blur(50px);
@@ -137,11 +137,10 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 10px #000000;
   overflow: hidden;
-  // height: 0;
-  // opacity: 0;
+  opacity: 0;
+  visibility: hidden;
   transition: 1.2s;
-
-  .options {
+  + .options {
     .circle {
       width: 100px;
       height: 100px;
@@ -338,6 +337,8 @@ body {
 @media (max-width: 530px) {
   .container {
     width: 100%;
+    border-radius: 0;
+    padding: 2rem;
   }
   .audio-player {
     width: 90%;
