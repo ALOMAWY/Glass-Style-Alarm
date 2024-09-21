@@ -21,8 +21,18 @@ function setCurrentValues() {
     currentTime.getHours() < 10
       ? `${"0" + currentTime.getHours()}`
       : currentTime.getHours() > 12
-      ? `${currentTime.getHours() - 12}`
-      : `${currentTime.getHours()}`;
+      ? `0${currentTime.getHours() - 12}`
+      : `0${currentTime.getHours()}`;
+
+  if (currentTime.getHours() < 10) {
+    HOURS = `0${currentTime.getHours()}`;
+  } else if (currentTime.getHours() > 12 && currentTime.getHours() < 20) {
+    if (currentTime.getHours() - 12 < 10) {
+      HOURS = `0${currentTime.getHours() - 12}`;
+    } else {
+      HOURS = `${currentTime.getHours() - 12}`;
+    }
+  }
 
   MINUTES =
     currentTime.getMinutes() < 10
@@ -393,7 +403,9 @@ cancelAlarm?.addEventListener("click", () => {
     let getClicksTimes = clickCounter.getAttribute("clicks");
 
     if (getClicksTimes) {
-      if (getClicksTimes == "10") closeAudioPlayer();
+      if (getClicksTimes == "10") {
+        closeAudioPlayer();
+      }
 
       clickCounter.innerHTML = `${+getClicksTimes + 1} / 10`;
 
