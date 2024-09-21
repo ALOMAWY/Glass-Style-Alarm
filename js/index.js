@@ -34,6 +34,10 @@ var arrayOfAlarmsDOM = Array.from(alarmHolders);
 var cancelAlarm = document.getElementById("cancel-alarm");
 var snoozeAlarm = document.getElementById("snooze-alarm");
 var audio = document.getElementById("audioPlayer");
+var addAlarmBtn = document.getElementById("add-alarm");
+var addAlarmPopup = document.querySelector(".add-alarm-control");
+var removeAlarmsBtn = document.getElementById("remove-alarms");
+var arrayOfCloseBtns = Array.from(document.querySelectorAll(".close-popup"));
 window.addEventListener("load", function () {
   // Start Check Alarms
   alarmCheck();
@@ -97,6 +101,8 @@ var alarmsInStorege = window.localStorage.getItem("alarms-list");
 if (alarmsInStorege) {
   alarmsList = JSON.parse(alarmsInStorege);
   createAlarmsDOM();
+} else {
+  createAlarmsDOM();
 }
 if (alarmsList.length == 0) {
   if (alarmsListContainer) alarmsListContainer.innerHTML = "There is no alarm.";
@@ -122,34 +128,21 @@ function playAlarm() {
   if (file) {
     if (file.type.startsWith("audio")) if (fileURL) audio.src = fileURL;
     audio.play().then(function () {
-      if (audioPlayer) {
-        audioPlayer.style.opacity = "1";
-        audioPlayer.style.visibility = "visible";
-      }
+      if (audioPlayer) audioPlayer.classList.remove("hidden");
     }).catch(function () {
-      if (audioPlayer) {
-        audioPlayer.style.opacity = "0";
-        audioPlayer.style.visibility = "hidden";
-      }
+      if (audioPlayer) audioPlayer.classList.add("hidden");
     });
   } else {
     audio.play().then(function () {
-      if (audioPlayer) {
-        audioPlayer.style.opacity = "1";
-        audioPlayer.style.visibility = "visible";
-      }
+      if (audioPlayer) audioPlayer.classList.remove("hidden");
     }).catch(function () {
-      if (audioPlayer) {
-        audioPlayer.style.opacity = "0";
-        audioPlayer.style.visibility = "hidden";
-      }
+      if (audioPlayer) audioPlayer.classList.add("hidden");
     });
   }
 }
 function resetAudio() {
   audio.currentTime = 0;
   audio.volume = 1;
-  volumeControl.value = "1";
 }
 
 // Check If There Alarm Or Not Status
@@ -159,7 +152,6 @@ var checking = true;
 function alarmCheck() {
   checking = true;
   var checker = setInterval(function () {
-    console.log("CHECK");
     var currnetDate = "".concat(HOURS, " : ").concat(MINUTES, " : ").concat(DATE);
     alarmsList.forEach(function (e) {
       if (e.alarmDate == currnetDate) {
@@ -169,6 +161,7 @@ function alarmCheck() {
         clearInterval(checker);
 
         // Diseble Checking Alarms Holder
+
         checking = false;
       }
     });
@@ -206,7 +199,7 @@ function createAlarmsDOM() {
   if (alarmsListContainer) alarmsListContainer.innerHTML = "";
   alarmsList.forEach(function (e) {
     var alarmHolder = document.createElement("div");
-    alarmHolder.classList.add("alarm-holder", "d-flex", "align-items-center", "justify-content-between", "gap-4");
+    alarmHolder.classList.add("alarm-holder", "d-flex", "align-items-center", "justify-content-evenly", "w-100");
     alarmHolder.setAttribute("data-id", "".concat(e.id));
     var alarmDate = document.createElement("p");
     alarmDate.classList.add("text-white", "fs-2");
@@ -256,103 +249,34 @@ alarmsListContainer === null || alarmsListContainer === void 0 || alarmsListCont
 
 // Audio Player Controls
 
-// Get references to the audio and controls
-
-var playPauseBtn = document.getElementById("play-pause");
-var progressBar = document.getElementById("progress-bar");
-var volumeControl = document.getElementById("volume-control");
-var muteBtn = document.getElementById("mute-btn");
-var audioMaxMinutes = document.getElementById("audio-max-min");
-var audioMaxSecunds = document.getElementById("audio-max-sec");
-var audioCurrnetMinutes = document.getElementById("audio-currnet-min");
-var audioCurrnetSecunds = document.getElementById("audio-current-sec");
-var audioSpeedSelecteElement = document.getElementById("speed");
-var audioLoopBtn = document.getElementById("loop");
-audioSpeedSelecteElement.addEventListener("change", function () {
-  if (audio) {
-    audio.playbackRate = +audioSpeedSelecteElement.value;
-  }
-});
-audioLoopBtn === null || audioLoopBtn === void 0 || audioLoopBtn.addEventListener("click", function () {
-  if (!audio.loop) {
-    audio.loop = true;
-    audioLoopBtn.style.position = "relative";
-    audioLoopBtn.innerHTML = "<i style=\"position:relative; left:5%; top:60%; rotate:180deg; \" class=\"fa-solid fa-arrow-rotate-left\"></i><i style=\"position:relative;  \" class=\"fa-solid fa-arrow-rotate-left\"></i>";
-  } else {
-    audio.loop = false;
-    audioLoopBtn.innerHTML = "<i class=\"fa-solid fa-arrow-rotate-left\"></i>";
-  }
-});
-
 // Play/Pause the audio
-
-function updatePlayerTimeValues() {
-  var fullTime = audio.duration;
-  if (!isNaN(fullTime)) {
-    var maxMinutes = Math.floor(fullTime / 60);
-    var maxSeconds = Math.floor(fullTime % 60);
-    if (audioMaxMinutes) audioMaxMinutes.innerHTML = "".concat(maxMinutes < 10 ? "0" + maxMinutes : maxMinutes);
-    if (audioMaxSecunds) audioMaxSecunds.innerHTML = "".concat(maxSeconds < 10 ? "0" + maxSeconds : maxSeconds);
-  }
-  setInterval(function () {
-    var currentTime = audio.currentTime;
-    var currentMinute = Math.floor(currentTime / 60);
-    var currentSecund = Math.floor(currentTime % 60);
-    if (audioCurrnetMinutes) audioCurrnetMinutes.innerText = "".concat(currentMinute < 10 ? "0" + currentMinute : currentMinute);
-    if (audioCurrnetSecunds) audioCurrnetSecunds.innerText = "".concat(currentSecund < 10 ? "0" + currentSecund : currentSecund);
-  }, 0);
-}
 
 // Close The Audio Player And Pause Audio
 function closeAudioPlayer() {
   audio.pause();
   if (audioPlayer) {
-    audioPlayer.style.opacity = "0";
+    audioPlayer.classList.add("hidden");
   }
 }
-playPauseBtn === null || playPauseBtn === void 0 || playPauseBtn.addEventListener("click", function () {
-  if (audio.paused || audio.ended) {
-    audio.play();
-    if (playPauseBtn) playPauseBtn.innerHTML = "<i class=\"fa-solid fa-pause\"></i>";
-  } else {
-    audio.pause();
-    playPauseBtn.innerHTML = "<i class=\"fa-solid fa-play\"></i>";
-  }
-});
 
 // Update progress bar as the audio plays
-audio === null || audio === void 0 || audio.addEventListener("timeupdate", function () {
-  var progressValue = audio.currentTime / audio.duration * 100;
-  if (progressBar) progressBar.value = "".concat(progressValue);
-});
 
 // Seek audio when progress bar is clicked
-progressBar === null || progressBar === void 0 || progressBar.addEventListener("input", function () {
-  var seekTime = +progressBar.value / 100 * audio.duration;
-  audio.currentTime = seekTime;
-  console.log(audio.currentTime % 60, audioCurrnetSecunds);
-});
 
-// Change volume control
-volumeControl === null || volumeControl === void 0 || volumeControl.addEventListener("input", function () {
-  audio.volume = +volumeControl.value / 100;
+addAlarmBtn === null || addAlarmBtn === void 0 || addAlarmBtn.addEventListener("click", function () {
+  console.log("clicked");
+  addAlarmPopup === null || addAlarmPopup === void 0 || addAlarmPopup.classList.toggle("hidden");
 });
-
-// Mute/Unmute audio
-muteBtn === null || muteBtn === void 0 || muteBtn.addEventListener("click", function () {
-  if (audio.muted) {
-    audio.muted = false;
-    if (muteBtn) muteBtn.innerHTML = "<i class=\"fa-solid fa-volume-high\"></i>";
-  } else {
-    audio.muted = true;
-    if (muteBtn) muteBtn.innerHTML = "<i class=\"fa-solid fa-volume-xmark\"></i>";
-  }
+removeAlarmsBtn === null || removeAlarmsBtn === void 0 || removeAlarmsBtn.addEventListener("click", function () {
+  alarmsList = [];
+  localStorage.setItem("alarms-list", JSON.stringify(alarmsList));
+  if (alarmsListContainer) alarmsListContainer.innerHTML = "There is no alarm.";
 });
-audio === null || audio === void 0 || audio.addEventListener("play", function () {
-  if (playPauseBtn) playPauseBtn.innerHTML = "<i class=\"fa-solid fa-pause\"></i>";
-});
-audio === null || audio === void 0 || audio.addEventListener("loadedmetadata", function () {
-  updatePlayerTimeValues();
+arrayOfCloseBtns.forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    var _btn$parentElement;
+    if (btn.nodeName.toLowerCase() == "div") (_btn$parentElement = btn.parentElement) === null || _btn$parentElement === void 0 || _btn$parentElement.classList.add("hidden");
+  });
 });
 snoozeAlarm === null || snoozeAlarm === void 0 || snoozeAlarm.addEventListener("click", function () {
   closeAudioPlayer();

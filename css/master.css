@@ -57,32 +57,6 @@ body {
   background-position: 50%;
 }
 
-.container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  gap: 100px;
-  width: 40%;
-  height: 100%;
-  padding: 7rem 1rem;
-  border-radius: 20px;
-  border: 1px solid white;
-  -webkit-backdrop-filter: blur(8px);
-          backdrop-filter: blur(8px);
-  -webkit-box-shadow: 0 0 10px #000000;
-          box-shadow: 0 0 10px #000000;
-}
-
 .alert {
   -webkit-transform: translate(-200px, -300px);
           transform: translate(-200px, -300px);
@@ -100,12 +74,32 @@ body {
   text-align: center;
 }
 
+.container {
+  width: 40%;
+  height: 100%;
+  border: 1px solid white;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  -webkit-box-shadow: 0 0 10px #000000;
+          box-shadow: 0 0 10px #000000;
+}
+.container .clock {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 10px;
+}
+.container .clock #time {
+  font-size: 4rem;
+  font-weight: bold;
+  color: white;
+}
+
 .clock {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   padding: 10px;
-  border-radius: 10px;
 }
 .clock #time {
   font-size: 4rem;
@@ -113,7 +107,36 @@ body {
   color: white;
 }
 
-.set-your-alarm {
+.add-alarm-control {
+  background-color: rgba(0, 0, 0, 0.8196078431);
+  border: 1px solid white;
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  top: 0px;
+}
+.add-alarm-control.hidden {
+  top: 100%;
+}
+.add-alarm-control .close-popup {
+  right: 1.3rem;
+  top: 1rem;
+}
+.add-alarm-control .set-your-alarm {
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -125,24 +148,24 @@ body {
       -ms-flex-pack: space-evenly;
           justify-content: space-evenly;
 }
-.set-your-alarm select {
+.add-alarm-control .set-your-alarm select {
   padding: 10px;
   font-size: 2rem;
   background-color: transparent;
   color: white;
   border: 0px solid transparent;
 }
-.set-your-alarm select:focus-visible {
+.add-alarm-control .set-your-alarm select:focus-visible {
   outline: none;
 }
-.set-your-alarm select option {
+.add-alarm-control .set-your-alarm select option {
   color: #000;
   background-color: rgba(255, 255, 255, 0.3764705882);
   -webkit-backdrop-filter: blur(6px-);
           backdrop-filter: blur(6px-);
 }
-
-.submit-section {
+.add-alarm-control .submit-section {
+  padding: 20px;
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -154,18 +177,17 @@ body {
       -ms-flex-pack: space-evenly;
           justify-content: space-evenly;
 }
-.submit-section input[type=file] {
+.add-alarm-control .submit-section input[type=file] {
   background-color: transparent;
   font-size: 1rem;
   padding: 20px;
-  border-radius: 7px;
   color: white;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   border: 1px solid white;
 }
-.submit-section #submit {
+.add-alarm-control .submit-section #submit {
   display: block;
   font-weight: bold;
   padding: 15px 30px;
@@ -173,58 +195,41 @@ body {
   text-transform: uppercase;
   color: white;
   outline: none;
-  border-radius: 6px;
   border: 1px solid white;
 }
-.submit-section #submit:focus {
+.add-alarm-control .submit-section #submit:focus {
   outline: none;
 }
 
-@-webkit-keyframes rotate {
-  from {
-    -webkit-filter: hue-rotate(0);
-            filter: hue-rotate(0);
-  }
-  to {
-    -webkit-filter: hue-rotate(360deg);
-            filter: hue-rotate(360deg);
-  }
-}
-
-@keyframes rotate {
-  from {
-    -webkit-filter: hue-rotate(0);
-            filter: hue-rotate(0);
-  }
-  to {
-    -webkit-filter: hue-rotate(360deg);
-            filter: hue-rotate(360deg);
-  }
-}
-/* Audio Player Controls */
 /* Base styling for the audio player container */
 .audio-player {
-  position: relative;
-  width: 60%;
-  margin: 20px auto;
-  -webkit-backdrop-filter: blur(50px);
-          backdrop-filter: blur(50px);
-  background-color: rgba(0, 0, 0, 0.4117647059);
-  padding: 15px;
-  border-radius: 10px;
-  -webkit-box-shadow: 0 0 10px #000000;
-          box-shadow: 0 0 10px #000000;
-  overflow: hidden;
-  opacity: 0;
-  visibility: hidden;
+  width: 100%;
+  height: 100%;
+  padding: 25px;
   -webkit-transition: 1.2s;
   transition: 1.2s;
+  border: 1px solid white;
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.9176470588);
+  -webkit-box-shadow: 0 0 10px #000000;
+          box-shadow: 0 0 10px #000000;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  top: 0;
 }
-.audio-player + .options .circle {
-  width: 100px;
-  height: 100px;
+.audio-player .circle {
+  width: 150px;
+  height: 150px;
   padding: 10px;
-  background-color: rgba(0, 0, 0, 0.231372549);
+  background-color: blue;
   -webkit-box-shadow: 0 0 10px -3px #000;
           box-shadow: 0 0 10px -3px #000;
   display: -webkit-box;
@@ -239,114 +244,88 @@ body {
   text-wrap: wrap;
   text-align: center;
 }
-.audio-player + .options .circle:hover {
+.audio-player .circle:first-child {
+  -webkit-animation: up-down 1.5s linear infinite;
+          animation: up-down 1.5s linear infinite;
+}
+.audio-player .circle:last-child {
+  -webkit-animation: down-up 1.5s linear infinite;
+          animation: down-up 1.5s linear infinite;
+}
+.audio-player .circle:hover {
   background-color: rgba(0, 0, 0, 0.5333333333);
 }
-
-/* Custom controls container */
-.controls {
-  /* Progress bar styling */
-  /* Volume control styling */
-  /* Mute button */
+.audio-player.hidden {
+  top: 100%;
 }
-.controls .control-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 3rem;
-  cursor: pointer;
-  padding: 5px 10px;
-}
-.controls .control-btn:hover {
-  color: #f0f0f0;
-}
-.controls .edit-speed select {
-  padding: 0 10px 20px;
-  font-size: 1.4rem;
-  background-color: transparent;
-  color: white;
-  border: 0px solid transparent;
-}
-.controls .edit-speed select:focus-visible {
-  outline: none;
-}
-.controls .edit-speed select option {
-  color: #000;
-  background-color: transparent;
-}
-.controls .progress-bar {
-  width: 100%;
-  height: 5px;
-  background-color: #444;
-  margin: 0 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.controls .progress-bar::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 10px;
-  height: 10px;
-  background-color: #fff;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.controls .progress-bar::-moz-range-thumb {
-  width: 10px;
-  height: 10px;
-  background-color: #fff;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.controls .volume-control {
-  width: 80px;
-  background-color: #444;
-  cursor: pointer;
-}
-.controls .volume-control::-webkit-slider-thumb, .controls .volume-control::-moz-range-thumb {
-  width: 10px;
-  height: 10px;
-  background-color: #fff;
-  cursor: pointer;
-}
-.controls #mute-btn {
-  font-size: 16px;
+.audio-player.hidden .circle {
+  -webkit-animation: none;
+          animation: none;
 }
 
+@-webkit-keyframes up-down {
+  0%, 35%, 100% {
+    -webkit-transform: translateY(2px);
+            transform: translateY(2px);
+  }
+  30%, 80% {
+    -webkit-transform: translateY(-2px);
+            transform: translateY(-2px);
+  }
+}
+
+@keyframes up-down {
+  0%, 35%, 100% {
+    -webkit-transform: translateY(2px);
+            transform: translateY(2px);
+  }
+  30%, 80% {
+    -webkit-transform: translateY(-2px);
+            transform: translateY(-2px);
+  }
+}
+@-webkit-keyframes down-up {
+  0%, 35%, 100% {
+    -webkit-transform: translateY(-2px);
+            transform: translateY(-2px);
+  }
+  30%, 80% {
+    -webkit-transform: translateY(2px);
+            transform: translateY(2px);
+  }
+}
+@keyframes down-up {
+  0%, 35%, 100% {
+    -webkit-transform: translateY(-2px);
+            transform: translateY(-2px);
+  }
+  30%, 80% {
+    -webkit-transform: translateY(2px);
+            transform: translateY(2px);
+  }
+}
 /* Play/Pause button */
 #alarms-list {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
+  min-height: -webkit-fit-content;
+  min-height: -moz-fit-content;
+  min-height: fit-content;
   max-height: 100%;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  letter-spacing: 3px;
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
   padding: 2rem;
-  border-radius: 20px 0 0 20px;
-  -webkit-box-shadow: 0 0 10px #000000;
-          box-shadow: 0 0 10px #000000;
+  letter-spacing: 3px;
   color: #fff;
 }
-#alarms-list div {
-  text-wrap: nowrap;
-  overflow: visible;
-  width: 210px;
-}
-#alarms-list div p {
+#alarms-list p {
   display: block;
   margin: 0;
   padding: 0;
 }
-#alarms-list div .remove-alarm:hover svg {
+#alarms-list .remove-alarm:hover svg {
   color: red;
 }
-#alarms-list div .remove-alarm svg {
+#alarms-list .remove-alarm svg {
   -webkit-transition: 0.02s;
   transition: 0.02s;
   color: #fff;
@@ -369,35 +348,10 @@ body {
   .container {
     width: 80%;
   }
-  #alarms-list div {
-    width: 150px;
-  }
-  #alarms-list.hidden {
-    width: 0;
-    padding: 0rem;
-    color: transparent;
-  }
-  #alarms-list.hidden div {
-    overflow: hidden;
-    width: 0;
-  }
-  #alarms-list::before {
-    content: "";
-    position: absolute;
-    border: 20px solid white;
-    border-color: transparent white transparent transparent;
-    top: 50%;
-    right: 100%;
-    -webkit-transform: translateY(-50%);
-            transform: translateY(-50%);
-  }
 }
 @media (max-width: 764px) {
   .container {
     width: 90%;
-  }
-  .audio-player {
-    width: 70%;
   }
 }
 @media (max-width: 530px) {
@@ -405,9 +359,6 @@ body {
     width: 100%;
     border-radius: 0;
     padding: 2rem;
-  }
-  .audio-player {
-    width: 90%;
   }
 }
 @media (max-width: 400px) {
