@@ -70,6 +70,10 @@ let removeAlarmsBtn = document.getElementById("remove-alarms");
 
 let arrayOfCloseBtns = Array.from(document.querySelectorAll(".close-popup"));
 
+let alarmDateTitle = document.getElementById("alarm-date-title");
+
+let alarmDate: string = ` 03 : 30 : AM `;
+
 window.addEventListener("load", () => {
   // Start Check Alarms
   alarmCheck();
@@ -152,8 +156,10 @@ files.addEventListener("change", (e) => {
 // Create URL Of File And Play It
 
 // Create Alarm Player And Actions
-function playAlarm() {
+function playAlarm(alarmDate: string) {
   resetAudio();
+
+  if (alarmDateTitle) alarmDateTitle.innerHTML = alarmDate;
   if (file) {
     if (file.type.startsWith("audio")) if (fileURL) audio.src = fileURL;
     audio
@@ -193,9 +199,8 @@ function alarmCheck() {
     let currnetDate = `${HOURS} : ${MINUTES} : ${DATE}`;
     alarmsList.forEach((e) => {
       if (e.alarmDate == currnetDate) {
-        console.log(e.alarmDate);
-        console.log(currnetDate);
-        playAlarm();
+        alarmDate = e.alarmDate;
+        playAlarm(alarmDate);
 
         clearInterval(checker);
 
@@ -224,6 +229,8 @@ submitAlarm?.addEventListener("click", () => {
       alertAlarm.style.animation = "none";
     }, 3000);
   }
+
+  addAlarmPopup?.classList.add("hidden");
 });
 
 function createNewAlarm(alarmDate: string, id: number) {
@@ -377,12 +384,42 @@ snoozeAlarm?.addEventListener("click", () => {
   let tenMinutesWithMilleSeconds = 10 * 60000;
 
   setTimeout(() => {
-    playAlarm();
+    playAlarm(alarmDate);
   }, tenMinutesWithMilleSeconds);
 });
-
+let clickCounter = document.getElementById("click-counter");
 cancelAlarm?.addEventListener("click", () => {
-  closeAudioPlayer();
+  if (clickCounter) {
+    let getClicksTimes = clickCounter.getAttribute("clicks");
+
+    if (getClicksTimes) {
+      if (getClicksTimes == "10") closeAudioPlayer();
+
+      clickCounter.innerHTML = `${+getClicksTimes + 1} / 10`;
+
+      clickCounter.setAttribute("clicks", `${+getClicksTimes + 1}`);
+    }
+  } else {
+    clickCounter = document.createElement("h3");
+
+    clickCounter.classList.add(
+      "position-absolute",
+      "start-50",
+      "top-0",
+      "translate-middle-x",
+      "text-danger",
+      "text-center",
+      "fw-bold"
+    );
+
+    clickCounter.innerHTML = "0 / 10";
+
+    clickCounter.setAttribute("clicks", "0");
+
+    clickCounter.id = "click-counter";
+
+    audioPlayer?.appendChild(clickCounter);
+  }
 
   let excludeSeconds: number = 60 - +SECONDS;
 

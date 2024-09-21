@@ -38,6 +38,8 @@ var addAlarmBtn = document.getElementById("add-alarm");
 var addAlarmPopup = document.querySelector(".add-alarm-control");
 var removeAlarmsBtn = document.getElementById("remove-alarms");
 var arrayOfCloseBtns = Array.from(document.querySelectorAll(".close-popup"));
+var alarmDateTitle = document.getElementById("alarm-date-title");
+var alarmDate = " 03 : 30 : AM ";
 window.addEventListener("load", function () {
   // Start Check Alarms
   alarmCheck();
@@ -123,8 +125,9 @@ files.addEventListener("change", function (e) {
 // Create URL Of File And Play It
 
 // Create Alarm Player And Actions
-function playAlarm() {
+function playAlarm(alarmDate) {
   resetAudio();
+  if (alarmDateTitle) alarmDateTitle.innerHTML = alarmDate;
   if (file) {
     if (file.type.startsWith("audio")) if (fileURL) audio.src = fileURL;
     audio.play().then(function () {
@@ -155,9 +158,8 @@ function alarmCheck() {
     var currnetDate = "".concat(HOURS, " : ").concat(MINUTES, " : ").concat(DATE);
     alarmsList.forEach(function (e) {
       if (e.alarmDate == currnetDate) {
-        console.log(e.alarmDate);
-        console.log(currnetDate);
-        playAlarm();
+        alarmDate = e.alarmDate;
+        playAlarm(alarmDate);
         clearInterval(checker);
 
         // Diseble Checking Alarms Holder
@@ -177,6 +179,7 @@ submitAlarm === null || submitAlarm === void 0 || submitAlarm.addEventListener("
       alertAlarm.style.animation = "none";
     }, 3000);
   }
+  addAlarmPopup === null || addAlarmPopup === void 0 || addAlarmPopup.classList.add("hidden");
 });
 function createNewAlarm(alarmDate, id) {
   var newAlarm = {
@@ -286,7 +289,7 @@ snoozeAlarm === null || snoozeAlarm === void 0 || snoozeAlarm.addEventListener("
   }, excludeSeconds * 1000);
   var tenMinutesWithMilleSeconds = 10 * 60000;
   setTimeout(function () {
-    playAlarm();
+    playAlarm(alarmDate);
   }, tenMinutesWithMilleSeconds);
 });
 cancelAlarm === null || cancelAlarm === void 0 ? void 0 : cancelAlarm.addEventListener("click", function () {

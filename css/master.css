@@ -206,8 +206,6 @@ body {
   width: 100%;
   height: 100%;
   padding: 25px;
-  -webkit-transition: 1.2s;
-  transition: 1.2s;
   border: 1px solid white;
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
@@ -223,6 +221,8 @@ body {
   -webkit-box-pack: space-evenly;
       -ms-flex-pack: space-evenly;
           justify-content: space-evenly;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   top: 0;
 }
 .audio-player .circle {

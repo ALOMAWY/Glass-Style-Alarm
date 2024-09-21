@@ -53,6 +53,8 @@ let addAlarmBtn = document.getElementById("add-alarm");
 let addAlarmPopup = document.querySelector(".add-alarm-control");
 let removeAlarmsBtn = document.getElementById("remove-alarms");
 let arrayOfCloseBtns = Array.from(document.querySelectorAll(".close-popup"));
+let alarmDateTitle = document.getElementById("alarm-date-title");
+let alarmDate = ` 03 : 30 : AM `;
 window.addEventListener("load", () => {
     // Start Check Alarms
     alarmCheck();
@@ -111,8 +113,10 @@ files.addEventListener("change", (e) => {
 });
 // Create URL Of File And Play It
 // Create Alarm Player And Actions
-function playAlarm() {
+function playAlarm(alarmDate) {
     resetAudio();
+    if (alarmDateTitle)
+        alarmDateTitle.innerHTML = alarmDate;
     if (file) {
         if (file.type.startsWith("audio"))
             if (fileURL)
@@ -154,9 +158,8 @@ function alarmCheck() {
         let currnetDate = `${HOURS} : ${MINUTES} : ${DATE}`;
         alarmsList.forEach((e) => {
             if (e.alarmDate == currnetDate) {
-                console.log(e.alarmDate);
-                console.log(currnetDate);
-                playAlarm();
+                alarmDate = e.alarmDate;
+                playAlarm(alarmDate);
                 clearInterval(checker);
                 // Diseble Checking Alarms Holder
                 checking = false;
@@ -174,6 +177,7 @@ submitAlarm === null || submitAlarm === void 0 ? void 0 : submitAlarm.addEventLi
             alertAlarm.style.animation = "none";
         }, 3000);
     }
+    addAlarmPopup === null || addAlarmPopup === void 0 ? void 0 : addAlarmPopup.classList.add("hidden");
 });
 function createNewAlarm(alarmDate, id) {
     let newAlarm = {
@@ -278,11 +282,28 @@ snoozeAlarm === null || snoozeAlarm === void 0 ? void 0 : snoozeAlarm.addEventLi
     }, excludeSeconds * 1000);
     let tenMinutesWithMilleSeconds = 10 * 60000;
     setTimeout(() => {
-        playAlarm();
+        playAlarm(alarmDate);
     }, tenMinutesWithMilleSeconds);
 });
+let clickCounter = document.getElementById("click-counter");
 cancelAlarm === null || cancelAlarm === void 0 ? void 0 : cancelAlarm.addEventListener("click", () => {
-    closeAudioPlayer();
+    if (clickCounter) {
+        let getClicksTimes = clickCounter.getAttribute("clicks");
+        if (getClicksTimes) {
+            if (getClicksTimes == "10")
+                closeAudioPlayer();
+            clickCounter.innerHTML = `${+getClicksTimes + 1} / 10`;
+            clickCounter.setAttribute("clicks", `${+getClicksTimes + 1}`);
+        }
+    }
+    else {
+        clickCounter = document.createElement("h3");
+        clickCounter.classList.add("position-absolute", "start-50", "top-0", "translate-middle-x", "text-danger", "text-center", "fw-bold");
+        clickCounter.innerHTML = "0 / 10";
+        clickCounter.setAttribute("clicks", "0");
+        clickCounter.id = "click-counter";
+        audioPlayer === null || audioPlayer === void 0 ? void 0 : audioPlayer.appendChild(clickCounter);
+    }
     let excludeSeconds = 60 - +SECONDS;
     setTimeout(() => {
         alarmCheck();
