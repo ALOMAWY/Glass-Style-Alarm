@@ -17,13 +17,6 @@ let dateAlarm = document.getElementById("alarm-date") as HTMLSelectElement;
 function setCurrentValues() {
   let currentTime = new Date(Date.now());
 
-  HOURS =
-    currentTime.getHours() < 10
-      ? `${"0" + currentTime.getHours()}`
-      : currentTime.getHours() > 12
-      ? `0${currentTime.getHours() - 12}`
-      : `0${currentTime.getHours()}`;
-
   if (currentTime.getHours() < 10) {
     HOURS = `0${currentTime.getHours()}`;
   } else if (currentTime.getHours() > 12 && currentTime.getHours() < 20) {
@@ -32,6 +25,8 @@ function setCurrentValues() {
     } else {
       HOURS = `${currentTime.getHours() - 12}`;
     }
+  } else {
+    HOURS = `${currentTime.getHours() - 12}`;
   }
 
   MINUTES =
@@ -156,6 +151,8 @@ files.addEventListener("change", (e) => {
   if (target.files) {
     file = target.files[0];
   }
+
+  console.log(file);
 
   localStorage.setItem("file", JSON.stringify(file));
   console.log(file);
@@ -403,8 +400,14 @@ cancelAlarm?.addEventListener("click", () => {
     let getClicksTimes = clickCounter.getAttribute("clicks");
 
     if (getClicksTimes) {
-      if (getClicksTimes == "10") {
+      if (+getClicksTimes >= 10) {
+        clickCounter.innerHTML = "0 / 10";
+
         closeAudioPlayer();
+
+        clickCounter.setAttribute("clicks", `0`);
+
+        return false;
       }
 
       clickCounter.innerHTML = `${+getClicksTimes + 1} / 10`;

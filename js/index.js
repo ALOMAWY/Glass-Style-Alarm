@@ -14,7 +14,17 @@ var minuteAlarm = document.getElementById("alarm-min");
 var dateAlarm = document.getElementById("alarm-date");
 function setCurrentValues() {
   var currentTime = new Date(Date.now());
-  HOURS = currentTime.getHours() < 10 ? "".concat("0" + currentTime.getHours()) : currentTime.getHours() > 12 ? "".concat(currentTime.getHours() - 12) : "".concat(currentTime.getHours());
+  if (currentTime.getHours() < 10) {
+    HOURS = "0".concat(currentTime.getHours());
+  } else if (currentTime.getHours() > 12 && currentTime.getHours() < 20) {
+    if (currentTime.getHours() - 12 < 10) {
+      HOURS = "0".concat(currentTime.getHours() - 12);
+    } else {
+      HOURS = "".concat(currentTime.getHours() - 12);
+    }
+  } else {
+    HOURS = "".concat(currentTime.getHours() - 12);
+  }
   MINUTES = currentTime.getMinutes() < 10 ? "".concat("0" + currentTime.getMinutes()) : "".concat(currentTime.getMinutes());
   SECONDS = currentTime.getSeconds() < 10 ? "".concat("0" + currentTime.getSeconds()) : "".concat(currentTime.getSeconds());
   DATE = currentTime.getHours() < 12 ? "AM" : "PM";
@@ -117,6 +127,7 @@ files.addEventListener("change", function (e) {
   if (target.files) {
     file = target.files[0];
   }
+  console.log(file);
   localStorage.setItem("file", JSON.stringify(file));
   console.log(file);
   fileURL = URL.createObjectURL(file);
@@ -292,8 +303,28 @@ snoozeAlarm === null || snoozeAlarm === void 0 || snoozeAlarm.addEventListener("
     playAlarm(alarmDate);
   }, tenMinutesWithMilleSeconds);
 });
+var clickCounter = document.getElementById("click-counter");
 cancelAlarm === null || cancelAlarm === void 0 ? void 0 : cancelAlarm.addEventListener("click", function () {
-  closeAudioPlayer();
+  if (clickCounter) {
+    var getClicksTimes = clickCounter.getAttribute("clicks");
+    if (getClicksTimes) {
+      if (+getClicksTimes >= 10) {
+        clickCounter.innerHTML = "0 / 10";
+        closeAudioPlayer();
+        clickCounter.setAttribute("clicks", "0");
+        return false;
+      }
+      clickCounter.innerHTML = "".concat(+getClicksTimes + 1, " / 10");
+      clickCounter.setAttribute("clicks", "".concat(+getClicksTimes + 1));
+    }
+  } else {
+    clickCounter = document.createElement("h3");
+    clickCounter.classList.add("position-absolute", "start-50", "top-0", "translate-middle-x", "text-danger", "text-center", "fw-bold");
+    clickCounter.innerHTML = "0 / 10";
+    clickCounter.setAttribute("clicks", "0");
+    clickCounter.id = "click-counter";
+    audioPlayer === null || audioPlayer === void 0 || audioPlayer.appendChild(clickCounter);
+  }
   var excludeSeconds = 60 - +SECONDS;
   setTimeout(function () {
     alarmCheck();
