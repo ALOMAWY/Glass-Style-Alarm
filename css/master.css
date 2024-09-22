@@ -76,9 +76,6 @@ body {
 
 .container {
   width: 40%;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
   border: 1px solid rgba(255, 255, 255, 0);
   -webkit-backdrop-filter: blur(8px);
           backdrop-filter: blur(8px);
