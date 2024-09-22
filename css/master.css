@@ -52,7 +52,7 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  background-image: url("../../assets/images/pexels-souvenirpixels-417074.jpg");
+  background-image: url("./../assets/images/pexels-souvenirpixels-417074.jpg");
   background-size: cover;
   background-position: 50%;
 }
